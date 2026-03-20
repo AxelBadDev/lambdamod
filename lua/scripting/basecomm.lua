@@ -4,7 +4,6 @@
    * Purpose: 
    *
 --]]
-
 PLUGIN.myinfo = 
 {
 	name = "Basic Comm Controls",
@@ -14,6 +13,7 @@ PLUGIN.myinfo =
 	protocol = LambdaMod.Loader.info.Protocol,
 	url = "https://github.com/hedv948-source"
 }
+
 local RegConsoleCmd = LambdaMod.cvar.RegConsoleCmd
 local RegAdminCmd = LambdaMod.cvar.RegAdminCmd
 local LibAdmin = LambdaMod.LibAdmin

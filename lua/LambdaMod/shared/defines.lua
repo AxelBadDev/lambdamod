@@ -17,8 +17,8 @@ if _G._DEFINES then return end
 _G._DEFINES = {}
 
 ---@class _G._DEFINES
-_G._DEFINES._VERSION = "2.3e"
-_G._DEFINES._BRANCH = "experimential"
+_G._DEFINES._VERSION = "2.4"
+_G._DEFINES._BRANCH = "main"
 _G._DEFINES._BUILD = "0106"
 _G._DEFINES._GAME_VERSION = "1.1"
 _G._DEFINES._DEVELOPMENT = true
