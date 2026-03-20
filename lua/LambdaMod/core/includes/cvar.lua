@@ -13,7 +13,7 @@ include( "LambdaMod/core/core.lua" )
 include( "LambdaMod/core/shared.lua" )
 includeC( "libadmin.lua" )
 
-include( "config/admins.lua" )
+include( "LambdaMod/config/admins.lua" )
 
 local concommand = require( "concommand" )
 LambdaMod = LambdaMod or {}
