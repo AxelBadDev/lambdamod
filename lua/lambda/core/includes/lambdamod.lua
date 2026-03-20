@@ -70,11 +70,11 @@ LambdaMod.AddCommand( "version", function( ply, cmd, arg )
 end, "", "" )
 
 LambdaMod.AddCommand( "cmds", function( ply, cmd, arg )
-	LambdaMod.printfc(0, "%-25s %-15s\n", "Command(s)", "Description")
+	LambdaMod.printfc(0, "%-25s %-20s\n", "Command(s)", "Description")
 	
     for k, v in pairs(LambdaMod.cvar.Registered) do
         --LambdaMod.printfc(0, "%s            %s\n", tostring( k ), tostring(( v.description or "" )) )
-        LambdaMod.printfc(0, "%-25s  %-15s\n", tostring( k ), tostring(( v.description or "" )) )
+        LambdaMod.printfc(0, "%-25s  %-20s\n", tostring( k ), tostring(( v.description or "" )) )
     end      
 end, "", "" )
 
