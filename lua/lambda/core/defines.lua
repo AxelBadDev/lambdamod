@@ -43,7 +43,7 @@ _G._DEFINES._MONTHS = {
 	[12] = "Dec"
 }
 local month = _G._DEFINES._MONTHS
----@sub class _BUILD_DATA
+
 _G._DEFINES._BUILD_DATA = {
 	day = "20",
 	month = month[3],
