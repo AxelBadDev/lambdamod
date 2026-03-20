@@ -1,12 +1,13 @@
 if CLIENT or _CLIENT then return end -- Make sure its server-side only
 
-include( "LambdaMod/core/core.lua" )
-include( "LambdaMod/core/shared.lua" )
-include( "LambdaMod/core/includes/lambdamod.lua" )
-include( "LambdaMod/core/includes/cvar.lua" )
-include( "LambdaMod/core/includes/libadmin.lua" )
-include( "LambdaMod/core/includes/vscript.lua" )
-include( "LambdaMod/config/admins.lua" )
+include( "lambda/shared/defines.lua" )
+include( "lambda/core/core.lua" )
+include( "lambda/core/shared.lua" )
+include( "lambda/core/includes/lambdamod.lua" )
+include( "lambda/core/includes/cvar.lua" )
+include( "lambda/core/includes/libadmin.lua" )
+include( "lambda/core/includes/vscript.lua" )
+include( "lambda/config/admins.lua" )
 
 local function split(inputstr, sep)
         if sep == nil then

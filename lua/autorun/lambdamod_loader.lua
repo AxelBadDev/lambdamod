@@ -11,11 +11,11 @@
 
 if CLIENT then return end
 
-include( "LambdaMod/shared/defines.lua" )
-include( "LambdaMod/core/core.lua" )
-include( "LambdaMod/core/includes/lambdamod.lua" )
-include( "LambdaMod/core/includes/cvar.lua" )
-include( "LambdaMod/core/includes/libadmin.lua" )
+include( "lambda/shared/defines.lua" )
+include( "lambda/core/core.lua" )
+include( "lambda/core/includes/lambdamod.lua" )
+include( "lambda/core/includes/cvar.lua" )
+include( "lambda/core/includes/libadmin.lua" )
 
 LambdaMod = LambdaMod or {}
 
@@ -23,15 +23,15 @@ LambdaMod.Loader = {}
 LambdaMod.Loader.Loaded = {}
 LambdaMod.Loader.Status = {}
 
-LambdaMod.Loader.Path = "addons/LambdaMod/lua/scripting/"
-LambdaMod.Loader.CPath = "addons/LambdaMod/lua/plugins/"
+LambdaMod.Loader.Path = "addons/lambdamod-main/lua/scripting/"
+LambdaMod.Loader.CPath = "addons/lambdamod-main/lua/plugins/"
 LambdaMod.Loader.LegacyPath = "lua/"
 
 LambdaMod.CLoader = {}
 LambdaMod.CLoader.Loaded = {}
 LambdaMod.CLoader.Status = {}
 
-LambdaMod.CLoader.Path = "addons/LambdaMod/lua/plugins/"
+LambdaMod.CLoader.Path = "addons/lambdamod-main/lua/plugins/"
 LambdaMod.CLoader.CPath = "/storage/emulated/150/Source SDK Base 2013/game/hl2sbpp/"
 LambdaMod.CLoader.LegacyPath = "lua/"
 

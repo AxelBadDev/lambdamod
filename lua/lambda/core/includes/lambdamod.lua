@@ -5,11 +5,11 @@
 
 if CLIENT or _CLIENT then return end
 
-include( "LambdaMod/core/shared.lua" )
-include( "LambdaMod/core/core.lua" )
-include( "LambdaMod/core/includes/cvar.lua" )
-include( "LambdaMod/core/includes/libadmin.lua" )
-include( "LambdaMod/core/includes/vscript.lua" )
+include( "lambda/core/shared.lua" )
+include( "lambda/core/core.lua" )
+include( "lambda/core/includes/cvar.lua" )
+include( "lambda/core/includes/libadmin.lua" )
+include( "lambda/core/includes/vscript.lua" )
 
 if _G.__LM_CCmd then return end
 _G.__LM_CCmd = true

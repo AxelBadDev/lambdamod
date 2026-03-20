@@ -9,8 +9,8 @@ if _G.__LM_CCvar then return end
 _G.__LM_CCvar = true
 
 includeC( "lambdamod.lua" )
-include( "LambdaMod/core/core.lua" )
-include( "LambdaMod/core/shared.lua" )
+include( "lambda/core/core.lua" )
+include( "lambda/core/shared.lua" )
 includeC( "libadmin.lua" )
 
 include( "LambdaMod/config/admins.lua" )

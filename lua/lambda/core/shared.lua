@@ -1,8 +1,8 @@
 if _G.__LM_CShared then return end
 _G.__LM_CShared = true
 
-include( "LambdaMod/shared/defines.lua" )
-include( "LambdaMod/config/admins.lua" )
+includeC( "defines.lua" )
+include( "lambda/config/admins.lua" )
 
 LambdaMod = LambdaMod or {}
 LambdaMod._INTERNAL = {}
