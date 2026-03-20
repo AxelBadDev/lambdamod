@@ -583,7 +583,8 @@ function Loader.LoadPlugin(path)
 		api = api,
 		--type = mod_type,
 		author = author,
-		url = url
+		url = url,
+		isluac = false
 	}
 	PLUGIN = nil
 end
@@ -694,18 +695,20 @@ function CLoader.LoadPlugin(path)
 		api = api,
 		--type = mod_type,
 		author = author,
-		url = url
+		url = url,
+		isluac = true
 	}
 	
 	Loader.Loaded[path] = 
 	{
-    	name = "(Compiled) " .. name,
+    	name = name,
 	    description = desc,
 		version = version,
 		api = api,
 		--type = mod_type,
 		author = author,
-		url = url
+		url = url,
+		isluac = true
 	}
 	PLUGIN = nil
 end
@@ -761,12 +764,10 @@ LambdaMod.AddCommand( "plugins", function( ply, cmd, arg )
     end
     --LambdaMod.printc(0, "LambdaMod Plugins:" )
     --LambdaMod.printfc(0, "-Id- Name                  Version        Author        Status\n")
-    LambdaMod.printfc(0, "%-25s %-15s %-12s\n", "-Id- Name", "Version", "Author")
+    LambdaMod.printfc(0, "%-25s %-20s %-15s %-10s\n", "-Id- Name", "Version", "Author", "Compiled")
     --LambdaMod.printfc(0, "[00] %s                    %s             %s            NONE\n", tostring( v.name ), tostring( v.version ), tostring( v.author ) )
     for k, v in pairs(Loader.Loaded) do
-	    LambdaMod.printfc(0, "[00] %-25s %-15s %-12s\n", v.name, v.version, v.author)
-        
-        
+	    LambdaMod.printfc(0, "[00] %-25s %-22s %-15s %-10s\n", v.name, v.version, v.author, tostring( v.isluac ) )
 	end
   end
 end, "", "<version|refresh|list>" ) 
