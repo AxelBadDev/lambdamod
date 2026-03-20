@@ -4,7 +4,7 @@ PLUGIN.myinfo =
 	author = "hedv948-source",
 	description = "Example",
 	version = LambdaMod.INFO._VERSION,
-	protocol = LambdaMod.Loader.api.version,
+	api = LambdaMod.Loader.api.version,
 	url = "https://github.com/hedv948-source"
 }
 --PLUGIN.name = "Example"

@@ -9,8 +9,8 @@ PLUGIN.myinfo =
 	author = "hedv948-source",
 	description = "Misc. Player Commands",
 	version = LambdaMod.INFO._VERSION,
-	protocol = LambdaMod.CLoader.info.Protocol,
-	url = "https://github.com/hedv948-source"
+	api = LambdaMod.CLoader.api.version,
+	url = "https://github.com/hedv948-source/lambdamod/"
 }
 
 local RegConsoleCmd = LambdaMod.cvar.RegConsoleCmd

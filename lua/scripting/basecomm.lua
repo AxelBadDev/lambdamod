@@ -10,8 +10,8 @@ PLUGIN.myinfo =
 	author = "hedv948-source",
 	description = "Provides methods of controlling communication.",
 	version = LambdaMod.INFO._VERSION,
-	protocol = LambdaMod.Loader.api.version,
-	url = "https://github.com/hedv948-source"
+	api = LambdaMod.Loader.api.version,
+	url = "https://github.com/hedv948-source/lambdamod/"
 }
 
 local RegConsoleCmd = LambdaMod.cvar.RegConsoleCmd

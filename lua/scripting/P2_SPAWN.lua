@@ -4,8 +4,8 @@ PLUGIN.myinfo =
 	author = "hedv948-source",
 	description = "Portal 2 spawn entity commands",
 	version = LambdaMod.INFO._VERSION,
-	protocol = LambdaMod.Loader.api.version,
-	url = "https://github.com/hedv948-source"
+	api = LambdaMod.Loader.api.version,
+	url = "https://github.com/hedv948-source/lambdamod/"
 }
 
 function PLUGIN.OnPluginStart()
