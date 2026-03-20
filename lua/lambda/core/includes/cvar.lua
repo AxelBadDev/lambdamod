@@ -13,7 +13,7 @@ include( "lambda/core/core.lua" )
 include( "lambda/core/shared.lua" )
 includeC( "libadmin.lua" )
 
-include( "LambdaMod/config/admins.lua" )
+include( "lambda/config/admins.lua" )
 
 local concommand = require( "concommand" )
 LambdaMod = LambdaMod or {}
@@ -33,7 +33,7 @@ function cvar.RegConsoleCmd(pName, pFn, pHelp, flags)
   registered[pName] = 
   {
     description = tostring( pHelp ) or "",
-	fn = pFn
+	  fn = pFn
   }
   
   concommand.Create(pName, pFn, pHelp, flags)
@@ -47,15 +47,15 @@ function cvar.RegAdminCmd( pName, pFn, pHelp, flags )
     
     registeredAdmin[ pName ] = 
 	{
-    	description = "[ADMIN]" .. tostring( pHelp ),
+    	description = "[ADMIN] " .. tostring( pHelp ),
     	fn = pFn
     }
     cvar.RegConsoleCmd( pName, function( pPlayer, pCmd, pArg )
     	local name = pPlayer:GetPlayerName();
     	local pCBack     
-    	if not _G._LM_CAdmins[ name ] or not pPlayer:IsServer() then
+    	if not _G._LM_CAdmins[ name ] and not pPlayer:IsServer() then
     		LambdaMod.printfc( 3, "You don't have permission to use this command\n" );
-    		return	
+    		return
     	end
     	pcall( registeredAdmin[ pName ].fn, pPlayer, pCmd, pArg )
     end, registeredAdmin[ pName ].description, flags )
@@ -67,10 +67,10 @@ function cvar.RegServerCmd( pName, pFn, pHelp, flags )
 		LambdaMod.SRprintf( "%s Already registered\n", pName )
 	end
 	
-	registered[ pName ] = {
-		description = tostring( pHelp ) or "",
-		fn = pFn
-	}
+	--registered[ pName ] = {
+		--description = tostring( pHelp ) or "",
+		--fn = pFn
+	--}
 	
 	cvar.RegConsoleCmd( pName, function( pPlayer, pCmd, pArg )
 		if not pPlayer:IsServer() then return end

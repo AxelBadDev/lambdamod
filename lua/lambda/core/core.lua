@@ -7,7 +7,7 @@ if _CLIENT then return end
 
 includeC( "shared.lua" )
 include( "config/default_blocked_concommands.lua" )
-include( "LambdaMod/shared/defines.lua" )
+includeC( "defines.lua" )
 
 if _G.__LM_CCore then return end
 _G.__LM_CCore = true
