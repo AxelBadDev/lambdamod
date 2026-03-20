@@ -43,11 +43,11 @@ local Loaded  = Loader.Loaded
 
 --- Deprecated
 
-CLoader.info = {}
-CLoader.info.Protocol = "8"
+CLoader.api = {}
+CLoader.api.version = "8.1"
 
-Loader.info = {}
-Loader.info.Protocol = "8"
+Loader.api = {}
+Loader.api.version = "8.1"
 
 file = file or {}
 f = f or {}

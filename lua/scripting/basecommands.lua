@@ -9,7 +9,7 @@ PLUGIN.myinfo =
 	author = "hedv948-source",
 	description = "Basic Admin Commands",
 	version = LambdaMod.INFO._VERSION,
-	protocol = LambdaMod.Loader.info.Protocol,
+	protocol = LambdaMod.Loader.api.version,
 	url = "https://github.com/hedv948-source"
 }
 
