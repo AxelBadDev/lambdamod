@@ -9,7 +9,7 @@ LambdaMod._INTERNAL = {}
 
 LambdaMod.INFO = 
 {
-	_VERSION     = _G. _DEFINES._VERSION or "fallback-alpha",  --"1.5",
+	_VERSION     = _G._DEFINES._VERSION or "fallback-alpha",  --"1.5",
 	_BRANCH      = _G._DEFINES._BRANCH or "Unknown",
 	_DEVELOPMENT = _G._DEFINES._DEVELOPMENT or true,
 	_BUILD       = _G._DEFINES._BUILD or "0",
