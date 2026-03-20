@@ -499,17 +499,13 @@ function Loader.LoadPlugin(path)
     
     local code = f.Read(path)
     if not code then
-        LambdaMod.printfc(3, "Stack Begin\n" )
         LambdaMod.printfc(3, " Failed to read: %s\n", path)
-        LambdaMod.printfc(3, "Stack End\n" )
         return
     end
 
     local fn, err = loadstring(code, path)
     if not fn then
-        LambdaMod.printfc(3, "Stack Begin\n" )
         LambdaMod.printfc(3, " Compile error in %s : %s\n", path, tostring(err))
-        LambdaMod.printfc(3, "Stack End\n" )
         return
     end
     
@@ -530,9 +526,7 @@ function Loader.LoadPlugin(path)
     --- local ok, runerr = PROTECTED -> pcall( fn )
     local ok, runErr = pcall(fn)
     if not ok then
-        LambdaMod.printfc(3, "Stack Begin\n" )
         LambdaMod.printfc(3, " Runtime error in %s : %s\n", path, tostring(runErr))
-        LambdaMod.printfc(3, "Stack End\n" )
         return
     end
 
@@ -546,9 +540,10 @@ function Loader.LoadPlugin(path)
 	local api = env.myinfo.api
 	
 	if not api then 
-	   LambdaMod.printfc(3, "Stack Begin\n" )
 	   LambdaMod.printfc(3, " [%s] NoAPIError: \"%s\" API Version is not specified\n",path, name )
-	   LambdaMod.printfc(3, "Stack End\n" )
+       return 
+    elseif api ~= Loader.api.version then
+       LambdaMod.printfc(3, " [%s] OutdatedAPI: \"%s\" API Version is not specified\n",path, name )
        return 
     end
 
@@ -558,18 +553,14 @@ function Loader.LoadPlugin(path)
     LambdaMod.printfc(6, " Author: %s\n", author)
 
     if type(env.OnPluginStart) ~= "function" then
-        LambdaMod.printfc(3, "Stack Begin\n" )
         LambdaMod.printfc(3, " [%s] Plugin has no PLUGIN.OnPluginStart(): %s\n",path, name)
-        LambdaMod.printfc(3, "Stack End\n" )
         return
     end
 
 	do
 		local ok, err = pcall(env.OnPluginStart)
 		if not ok then
-			LambdaMod.printfc(3, "Stack Begin\n" )
             LambdaMod.printfc(3, " in [\"%s\"] OnPluginStart(): [Error: %s]\n", path, tostring( err ) )
-            LambdaMod.printfc(3, "Stack End\n" )
             return
         end
 	end
@@ -594,9 +585,7 @@ function CLoader.LoadPlugin(path)
     
     local code = f.Read(path)
     if not code then
-        LambdaMod.printfc(3, "Stack Begin\n" )
         LambdaMod.printfc(3, " Failed to read: %s\n", path)
-        LambdaMod.printfc(3, "Stack End\n" )
         return
     end
 
@@ -626,9 +615,7 @@ function CLoader.LoadPlugin(path)
     --Msg( tostring( dir ) .. "\n" )
     local ok, runErr = pcall(dofile, path)
     if not ok then
-        LambdaMod.printfc(3, "Stack Begin\n" )
         LambdaMod.printfc(3, " Runtime error in %s : %s\n", path, tostring(runErr))
-        LambdaMod.printfc(3, "Stack End\n" )
         return
     end
 
@@ -656,10 +643,11 @@ function CLoader.LoadPlugin(path)
      --icon = ""
 	--end
 	
-	if not apo then 
-	   LambdaMod.printfc(3, "Stack Begin\n" )
+	if not api then 
 	   LambdaMod.printfc(3, " [%s] NoAPIError: \"%s\" API Version is not specified\n",path, name )
-	   LambdaMod.printfc(3, "Stack End\n" )
+       return 
+    elseif api ~= CLoader.api.version then
+       LambdaMod.printfc(3, " [%s] OutdatedAPI: \"%s\" API Version is not specified\n",path, name )
        return 
     end
 
@@ -670,18 +658,14 @@ function CLoader.LoadPlugin(path)
     --LambdaMod.printfc(6, " Type: %s\n", mod_type)
 
     if type(env.OnPluginStart) ~= "function" then
-        LambdaMod.printfc(3, "Stack Begin\n" )
         LambdaMod.printfc(3, " [%s] Plugin has no PLUGIN.OnPluginStart(): %s\n",path, name)
-        LambdaMod.printfc(3, "Stack End\n" )
         return
     end
 
 	do
 		local ok, err = pcall(env.OnPluginStart)
 		if not ok then
-			LambdaMod.printfc(3, "Stack Begin\n" )
             LambdaMod.printfc(3, " in [\"%s\"] OnPluginStart(): [Error: %s]\n", path, tostring( err ) )
-            LambdaMod.printfc(3, "Stack End\n" )
             return
         end
 	end
