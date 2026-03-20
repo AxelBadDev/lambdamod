@@ -38,11 +38,6 @@ LambdaMod.CLoader.LegacyPath = "lua/"
 local CLoader = LambdaMod.CLoader
 local Loader  = LambdaMod.Loader
 
-local Loaded  = Loader.Loaded
-
-
---- Deprecated
-
 CLoader.api = {}
 CLoader.api.version = "8.1"
 
