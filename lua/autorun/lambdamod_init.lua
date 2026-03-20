@@ -1,6 +1,6 @@
 --[[ 
    * Copyright (C) 2026 hedv948-source, All Rights Reserved
-   * Purpose: Player Commands
+   * Purpose: Initialize LambdaMod
 --]]
 if CLIENT or _CLIENT then return end -- Make sure its server-side only
 
