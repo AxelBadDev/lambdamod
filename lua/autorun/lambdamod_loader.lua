@@ -543,11 +543,11 @@ function Loader.LoadPlugin(path)
     
     local url = env.myinfo.url or "No URL" 
 
-	local protocol = env.myinfo.protocol
+	local api = env.myinfo.api
 	
-	if not protocol then 
+	if not api then 
 	   LambdaMod.printfc(3, "Stack Begin\n" )
-	   LambdaMod.printfc(3, " [%s] NoProtocolError: \"%s\" Protocol Version is not specified\n",path, name )
+	   LambdaMod.printfc(3, " [%s] NoAPIError: \"%s\" API Version is not specified\n",path, name )
 	   LambdaMod.printfc(3, "Stack End\n" )
        return 
     end
@@ -580,7 +580,7 @@ function Loader.LoadPlugin(path)
     	name = name,
 	    description = desc,
 		version = version,
-		protocol = protocol,
+		api = api,
 		--type = mod_type,
 		author = author,
 		url = url
@@ -638,7 +638,7 @@ function CLoader.LoadPlugin(path)
     
     local url = env.myinfo.url or "No URL" 
 
-	local protocol = env.myinfo.protocol
+	local api = env.myinfo.api
     
     --local sm = env.Settings.ShowInSpawnmenu == true
     --local category = env.Settings.Category or "Addons"
@@ -655,9 +655,9 @@ function CLoader.LoadPlugin(path)
      --icon = ""
 	--end
 	
-	if not protocol then 
+	if not apo then 
 	   LambdaMod.printfc(3, "Stack Begin\n" )
-	   LambdaMod.printfc(3, " [%s] NoProtocolError: \"%s\" Protocol Version is not specified\n",path, name )
+	   LambdaMod.printfc(3, " [%s] NoAPIError: \"%s\" API Version is not specified\n",path, name )
 	   LambdaMod.printfc(3, "Stack End\n" )
        return 
     end
@@ -691,7 +691,7 @@ function CLoader.LoadPlugin(path)
     	name = name,
 	    description = desc,
 		version = version,
-		protocol = protocol,
+		api = api,
 		--type = mod_type,
 		author = author,
 		url = url
@@ -702,7 +702,7 @@ function CLoader.LoadPlugin(path)
     	name = "(Compiled) " .. name,
 	    description = desc,
 		version = version,
-		protocol = protocol,
+		api = api,
 		--type = mod_type,
 		author = author,
 		url = url
@@ -750,8 +750,8 @@ LambdaMod.AddCommand( "plugins", function( ply, cmd, arg )
 	LambdaMod.printfc(0, "Usage: lambda plugins <version|refresh|list>\n")
   end
   if arg == "version" then 
-	LambdaMod.printfc(0, "LambdaMod Version: %s\n", tostring( LambdaMod.INFO._VERSION ) )
-	LambdaMod.printfc(0, "Protocol: %s\n", tostring( Loader.info.Protocol ) )
+	LambdaMod.printfc(0, "LambdaMod Loader Version: %s\n", tostring( LambdaMod.INFO._VERSION ) )
+	LambdaMod.printfc(0, "LambdaMod API: %s\n", tostring( Loader.api.version ) )
   elseif arg == "refresh" then
 	Loader.LoadAll()
   elseif arg == "list" then
@@ -780,7 +780,7 @@ LambdaMod.AddCommand( "cloader", function( ply, cmd, arg )
   end
   if arg == "version" then 
 	LambdaMod.printfc(0, "LambdaMod Compiled Loader Version: %s\n", tostring( LambdaMod.INFO._VERSION ) )
-	LambdaMod.printfc(0, "Protocol: %s\n", tostring( CLoader.info.Protocol ) )
+	LambdaMod.printfc(0, "LambdaMod API: %s\n", tostring( CLoader.api.version ) )
   elseif arg == "refresh" then
 	CLoader.LoadAll()
   elseif arg == "list" then
