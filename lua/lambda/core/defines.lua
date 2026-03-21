@@ -1,17 +1,8 @@
---[[
+--[[ 
+   * Copyright (C) 2026 hedv948-source, All Rights Reserved
+   * Purpose: Definition for LambdaMod
+--]]
 
-     Admin flags:
-     
-         DEFAULT                         0 [UNUSED]
-         
-         _ADMIN_GENERIC                   30    
-         _ADMIN_KICK                      40
-         _ADMIN_BAN                       50
-         _ADMIN_SLAY                      70
-         _ADMIN_CHEATS                    150
-         _ADMIN_ROOT                      200
-
-]]
 --includeC("define_admin.lua")
 if _G._DEFINES then return end
 _G._DEFINES = {}

@@ -1,19 +1,17 @@
---[[
+--[[ 
+   * Copyright (C) 2026 hedv948-source, All Rights Reserved
+   * Purpose: Admin definition
+--]]
 
-      admin defines
-      
-      
-      
-         GENERIC                   30    
+--[[
+      Admin Flags
+        GENERIC                   30    
          KICK                      40
          BAN                       50
          SLAY                      70
          CHEATS                    150
          ROOT                      200
-
-
-
-]]
+--]]
 includeC("define.lua")
 
 _DEFINES = _G._DEFINES or {}

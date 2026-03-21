@@ -1,3 +1,8 @@
+--[[ 
+   * Copyright (C) 2026 hedv948-source, All Rights Reserved
+   * Purpose: Shared library for LambdaMod
+--]]
+
 if _G.__LM_CShared then return end
 _G.__LM_CShared = true
 

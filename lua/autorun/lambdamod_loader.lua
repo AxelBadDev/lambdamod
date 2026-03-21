@@ -1,13 +1,7 @@
 --[[ 
-   *
    * Copyright (C) 2026 hedv948-source, All Rights Reserved
-   * 
    * Purpose: Plugin loader
-   *
-   * Notice: This code contains YourLocalCappy's ESM 2.0 Addon loader source code
-   * and indeed incompatible with ESM 2.0's Addons
-   *
-]]
+--]]
 
 if CLIENT then return end
 
