@@ -39,12 +39,12 @@ RegAdminCmd( "lambda_cvar", function( ply, cmd, arg )
 end, "Change ConVar value" )
 
 LambdaMod.AddCommand( "admins", function( ply, cmd, arg )
-	if not _G._L_CAdmins then 
+	if not _G._LM_CAdmins then 
 		LambdaMod.printfc(0, "Sorry, but currently admin table isn't available right now.\n")
 		return 
 	end
 	
-	for k,v in pairs( _G._L_CAdmins ) do
+	for k,v in pairs( _G._LM_CAdmins ) do
 		LambdaMod.printfc(0, "%s\n", tostring( k ) )
 	end
 end )
