@@ -36,7 +36,7 @@ _G._DEFINES._MONTHS = {
 local month = _G._DEFINES._MONTHS
 
 _G._DEFINES._BUILD_DATA = {
-	day = "20",
+	day = "22",
 	month = month[3],
 	year = "2026"
 }
