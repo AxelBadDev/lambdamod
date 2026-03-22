@@ -493,15 +493,13 @@ function Loader.LoadPlugin(path)
     
     local code = f.Read(path)
     if not code then
-        LambdaMod.printfc(3, "Failed to read: %s\n", path)
-        Loader.Loaded[path] = { status = "FAIL" }
+        LambdaMod.printfc(3, " Failed to read: %s\n", path)
         return
     end
 
     local fn, err = loadstring(code, path)
     if not fn then
-        LambdaMod.printfc(3, "Compile error in %s : %s\n", path, tostring(err))
-        Loader.Loaded[path] = { status = "FAIL" }
+        LambdaMod.printfc(3, " Compile error in %s : %s\n", path, tostring(err))
         return
     end
     
@@ -522,8 +520,7 @@ function Loader.LoadPlugin(path)
     --- local ok, runerr = PROTECTED -> pcall( fn )
     local ok, runErr = pcall(fn)
     if not ok then
-        LambdaMod.printfc(3, "Runtime error in %s : %s\n", path, tostring(runErr))
-        Loader.Loaded[path] = { status = "ERROR" }
+        LambdaMod.printfc(3, " Runtime error in %s : %s\n", path, tostring(runErr))
         return
     end
 
@@ -537,12 +534,10 @@ function Loader.LoadPlugin(path)
 	local api = env.myinfo.api
 	
 	if not api then 
-	   LambdaMod.printfc(3, "[%s] NoAPIError: \"%s\" API Version is not specified\n",path, name )
-	   Loader.Loaded[path] = { status = "FAIL" }
+	   LambdaMod.printfc(3, " [%s] NoAPIError: \"%s\" API Version is not specified\n",path, name )
        return 
     elseif api ~= Loader.api.version then
-       LambdaMod.printfc(3, "[%s] OutdatedAPI: \"%s\" API Version is not specified\n",path, name )
-       Loader.Loaded[path] = { status = "FAIL" }
+       LambdaMod.printfc(3, " [%s] OutdatedAPI: \"%s\" API Version is not specified\n",path, name )
        return 
     end
 
@@ -552,16 +547,14 @@ function Loader.LoadPlugin(path)
     LambdaMod.printfc(6, " Author: %s\n", author)
 
     if type(env.OnPluginStart) ~= "function" then
-        LambdaMod.printfc(3, "[%s] Plugin has no PLUGIN.OnPluginStart(): %s\n",path, name)
-        Loader.Loaded[path] = { status = "FAIL" }
+        LambdaMod.printfc(3, " [%s] Plugin has no PLUGIN.OnPluginStart(): %s\n",path, name)
         return
     end
 
 	do
 		local ok, err = pcall(env.OnPluginStart)
 		if not ok then
-            LambdaMod.printfc(3, "in [\"%s\"] OnPluginStart(): [Error: %s]\n", path, tostring( err ) )
-            Loader.Loaded[path] = { status = "ERROR" }
+            LambdaMod.printfc(3, " in [\"%s\"] OnPluginStart(): [Error: %s]\n", path, tostring( err ) )
             return
         end
 	end
@@ -576,7 +569,6 @@ function Loader.LoadPlugin(path)
 		--type = mod_type,
 		author = author,
 		url = url,
-		status = "RUN",
 		isluac = false
 	}
 	PLUGIN = nil
@@ -587,11 +579,7 @@ function CLoader.LoadPlugin(path)
     
     local code = f.Read(path)
     if not code then
-        LambdaMod.printfc(3, "Failed to read: %s\n", path)
-        Loader.Loaded[path] = 
-		{
-        	status = "FAIL"
-        }
+        LambdaMod.printfc(3, " Failed to read: %s\n", path)
         return
     end
 
@@ -621,8 +609,7 @@ function CLoader.LoadPlugin(path)
     --Msg( tostring( dir ) .. "\n" )
     local ok, runErr = pcall(dofile, path)
     if not ok then
-        LambdaMod.printfc(3, "Runtime error in %s : %s\n", path, tostring(runErr))
-        Loader.Loaded[path] = { status = "ERROR" }
+        LambdaMod.printfc(3, " Runtime error in %s : %s\n", path, tostring(runErr))
         return
     end
 
@@ -651,12 +638,10 @@ function CLoader.LoadPlugin(path)
 	--end
 	
 	if not api then 
-	   LambdaMod.printfc(3, "[%s] NoAPIError: \"%s\" API Version is not specified\n",path, name )
-	   Loader.Loaded[path] = { status = "FAIL" }
+	   LambdaMod.printfc(3, " [%s] NoAPIError: \"%s\" API Version is not specified\n",path, name )
        return 
     elseif api ~= CLoader.api.version then
-       LambdaMod.printfc(3, "[%s] OutdatedAPI: \"%s\" API Version is outdated!\n",path, name )
-       Loader.Loaded[path] = { status = "FAIL" }
+       LambdaMod.printfc(3, " [%s] OutdatedAPI: \"%s\" API Version is not specified\n",path, name )
        return 
     end
 
@@ -667,16 +652,14 @@ function CLoader.LoadPlugin(path)
     --LambdaMod.printfc(6, " Type: %s\n", mod_type)
 
     if type(env.OnPluginStart) ~= "function" then
-        LambdaMod.printfc(3, "[%s] Plugin has no PLUGIN.OnPluginStart(): %s\n",path, name)
-        Loader.Loaded[path] = { status = "FAIL" }
+        LambdaMod.printfc(3, " [%s] Plugin has no PLUGIN.OnPluginStart(): %s\n",path, name)
         return
     end
 
 	do
 		local ok, err = pcall(env.OnPluginStart)
 		if not ok then
-            LambdaMod.printfc(3, "in [\"%s\"] OnPluginStart(): [Error: %s]\n", path, tostring( err ) )
-            Loader.Loaded[path] = { status = "FAIL" }
+            LambdaMod.printfc(3, " in [\"%s\"] OnPluginStart(): [Error: %s]\n", path, tostring( err ) )
             return
         end
 	end
@@ -691,7 +674,6 @@ function CLoader.LoadPlugin(path)
 		--type = mod_type,
 		author = author,
 		url = url,
-		status = "RUN",
 		isluac = true
 	}
 	
@@ -704,7 +686,6 @@ function CLoader.LoadPlugin(path)
 		--type = mod_type,
 		author = author,
 		url = url,
-		status = "RUN",
 		isluac = true
 	}
 	PLUGIN = nil
@@ -743,45 +724,45 @@ Loader.LoadAll()
 CLoader.LoadAll()
 --,LambdaMod.Loader.LoadAll()
 
-LambdaMod.AddCommand( "plugins", function( ply, cmd, args )
+LambdaMod.AddCommand( "plugins", function( ply, cmd, arg )
   local files = file.Find(Loader.Path .. "*.lua", "MOD")
 
-  if not args then 
+  if not arg then 
 	LambdaMod.printfc(0, "Usage: lambda plugins <version|refresh|list>\n")
   end
-  if args == "version" then 
+  if arg == "version" then 
 	LambdaMod.printfc(0, "LambdaMod Loader Version: %s\n", tostring( LambdaMod.INFO._VERSION ) )
 	LambdaMod.printfc(0, "LambdaMod API: %s\n", tostring( Loader.api.version ) )
-  elseif args == "refresh" then
+  elseif arg == "refresh" then
 	Loader.LoadAll()
-  elseif args == "list" then
+  elseif arg == "list" then
 	if not files or #files == 0 then
         LambdaMod.printc(3, "No plugins found")
         return
     end
     --LambdaMod.printc(0, "LambdaMod Plugins:" )
     --LambdaMod.printfc(0, "-Id- Name                  Version        Author        Status\n")
-    LambdaMod.printfc(0, "%-40s %-35s %-30s %-25s %-20s %-15s\n", "Name", "Version", "Author", "Mode", "Status", "Path")
+    LambdaMod.printfc(0, "%-25s %-20s %-20s %-10s\n", "-Name", "Version", "Author", "Compiled")
     --LambdaMod.printfc(0, "[00] %s                    %s             %s            NONE\n", tostring( v.name ), tostring( v.version ), tostring( v.author ) )
     for k, v in pairs(Loader.Loaded) do
-	    LambdaMod.printfc(0, "%-40s %-35s %-30s %-25s %-20s %-15s\n", ( v.name or "Unknown" ), ( v.version or "?" ), ( v.author or "Unknown" ), tostring( v.isluac and "COMPILED" or "INTERPRETED" ), tostring( v.status ), tostring( k ) )
+	    LambdaMod.printfc(0, "%-25s %-20s %-20s %-10s\n", v.name, v.version, v.author, tostring( v.isluac ) )
 	end
   end
 end, "", "<version|refresh|list>" ) 
 
-LambdaMod.AddCommand( "cloader", function( ply, cmd, args )
+LambdaMod.AddCommand( "cloader", function( ply, cmd, arg )
   Msg( tostring( dir ) .. "\n" )
   local files = file.Find( CLoader.CPath .. CLoader.Path .. "*.luac", "MOD")
 
-  if not args then 
+  if not arg then 
 	LambdaMod.printfc(0, "Usage: lambda cloader <version|refresh|list>\n")
   end
-  if args == "version" then 
+  if arg == "version" then 
 	LambdaMod.printfc(0, "LambdaMod Compiled Loader Version: %s\n", tostring( LambdaMod.INFO._VERSION ) )
 	LambdaMod.printfc(0, "LambdaMod API: %s\n", tostring( CLoader.api.version ) )
-  elseif args == "refresh" then
+  elseif arg == "refresh" then
 	CLoader.LoadAll()
-  elseif args == "list" then
+  elseif arg == "list" then
 	if not files or #files == 0 then
         LambdaMod.printc(3, "No plugins found")
         return
