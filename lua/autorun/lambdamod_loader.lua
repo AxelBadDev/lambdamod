@@ -527,22 +527,22 @@ function Loader.LoadPlugin(path)
         return
     end
 
-    local name = env.myinfo.name or "Unknown"
-    local desc = env.myinfo.description or "No description"
-    local version = env.myinfo.version or "?"
-    local author = env.myinfo.author or "Unknown"
+    local name = PLUGIN.myinfo.name or "Unknown"
+    local desc = PLUGIN.myinfo.description or "No description"
+    local version = PLUGIN.myinfo.version or "?"
+    local author = PLUGIN.myinfo.author or "Unknown"
     
-    local url = env.myinfo.url or "No URL" 
+    local url = PLUGIN.myinfo.url or "No URL" 
 
-	local api = env.myinfo.api
+	local api = PLUGIN.myinfo.api
 	
 	if not api then 
 	   LambdaMod.printfc(3, "[%s] NoAPIError: \"%s\" API Version is not specified\n",path, name )
-	   Loader.Loaded[path] = { status = "FAIL" }
+	   Loader.Loaded[path] = { name = name, status = "FAIL" }
        return 
     elseif api ~= Loader.api.version then
        LambdaMod.printfc(3, "[%s] OutdatedAPI: \"%s\" API Version is not specified\n",path, name )
-       Loader.Loaded[path] = { status = "FAIL" }
+       Loader.Loaded[path] = { name = name, status = "FAIL" }
        return 
     end
 
@@ -553,7 +553,7 @@ function Loader.LoadPlugin(path)
 
     if type(env.OnPluginStart) ~= "function" then
         LambdaMod.printfc(3, "[%s] Plugin has no PLUGIN.OnPluginStart(): %s\n",path, name)
-        Loader.Loaded[path] = { status = "FAIL" }
+        Loader.Loaded[path] = { name = name, status = "FAIL" }
         return
     end
 
@@ -561,7 +561,7 @@ function Loader.LoadPlugin(path)
 		local ok, err = pcall(env.OnPluginStart)
 		if not ok then
             LambdaMod.printfc(3, "in [\"%s\"] OnPluginStart(): [Error: %s]\n", path, tostring( err ) )
-            Loader.Loaded[path] = { status = "ERROR" }
+            Loader.Loaded[path] = { name = name, status = "ERROR" }
             return
         end
 	end
@@ -626,14 +626,14 @@ function CLoader.LoadPlugin(path)
         return
     end
 
-    local name = env.myinfo.name or "Unknown"
-    local desc = env.myinfo.description or "No description"
-    local version = env.myinfo.version or "?"
-    local author = env.myinfo.author or "Unknown"
+    local name = PLUGIN.myinfo.name or "Unknown"
+    local desc = PLUGIN.myinfo.description or "No description"
+    local version = PLUGIN.myinfo.version or "?"
+    local author = PLUGIN.myinfo.author or "Unknown"
     
-    local url = env.myinfo.url or "No URL" 
+    local url = PLUGIN.myinfo.url or "No URL" 
 
-	local api = env.myinfo.api
+	local api = PLUGIN.myinfo.api
     
     --local sm = env.Settings.ShowInSpawnmenu == true
     --local category = env.Settings.Category or "Addons"
@@ -652,11 +652,11 @@ function CLoader.LoadPlugin(path)
 	
 	if not api then 
 	   LambdaMod.printfc(3, "[%s] NoAPIError: \"%s\" API Version is not specified\n",path, name )
-	   Loader.Loaded[path] = { status = "FAIL" }
+	   Loader.Loaded[path] = { name = name, status = "FAIL" }
        return 
     elseif api ~= CLoader.api.version then
        LambdaMod.printfc(3, "[%s] OutdatedAPI: \"%s\" API Version is outdated!\n",path, name )
-       Loader.Loaded[path] = { status = "FAIL" }
+       Loader.Loaded[path] = { name = name, status = "FAIL" }
        return 
     end
 
@@ -668,7 +668,7 @@ function CLoader.LoadPlugin(path)
 
     if type(env.OnPluginStart) ~= "function" then
         LambdaMod.printfc(3, "[%s] Plugin has no PLUGIN.OnPluginStart(): %s\n",path, name)
-        Loader.Loaded[path] = { status = "FAIL" }
+        Loader.Loaded[path] = { name = name, status = "FAIL" }
         return
     end
 
@@ -676,7 +676,7 @@ function CLoader.LoadPlugin(path)
 		local ok, err = pcall(env.OnPluginStart)
 		if not ok then
             LambdaMod.printfc(3, "in [\"%s\"] OnPluginStart(): [Error: %s]\n", path, tostring( err ) )
-            Loader.Loaded[path] = { status = "FAIL" }
+            Loader.Loaded[path] = { name = name, status = "FAIL" }
             return
         end
 	end
