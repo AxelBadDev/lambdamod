@@ -89,3 +89,12 @@ function cvar.RemoveConsoleCmd(pName)
 		concommand.Remove( pName )
 	end	
 end
+
+function cvar.SetValue( pCvar, pArg )
+  local GetConVar = cvar.FindVar
+	if _SERVER or not _CLIENT then
+		assert( (type(pCvar) == "string"), "bad argument #1 to 'SetValue' (string expected got " .. type(pCvar) .. ")")
+		assert( (type(pArg) == "string"), "bad argument #2 to 'SetValue' (string expected got " .. type(pArg) .. ")")
+		GetConVar( pCvar ):SetValue( pArg )
+	end
+end

@@ -761,10 +761,10 @@ LambdaMod.AddCommand( "plugins", function( ply, cmd, args )
     end
     --LambdaMod.printc(0, "LambdaMod Plugins:" )
     --LambdaMod.printfc(0, "-Id- Name                  Version        Author        Status\n")
-    LambdaMod.printfc(0, "%-40s %-35s %-30s %-25s %-20s %-15s\n", "Name", "Version", "Author", "Mode", "Status", "Path")
+    LambdaMod.printfc(0, "%-40s %-35s %-30s %-25s %-20s\n", "Name", "Version", "Author", "Mode", "Status")
     --LambdaMod.printfc(0, "[00] %s                    %s             %s            NONE\n", tostring( v.name ), tostring( v.version ), tostring( v.author ) )
     for k, v in pairs(Loader.Loaded) do
-	    LambdaMod.printfc(0, "%-40s %-35s %-30s %-25s %-20s %-15s\n", ( v.name or "Unknown" ), ( v.version or "?" ), ( v.author or "Unknown" ), tostring( v.isluac and "COMPILED" or "INTERPRETED" ), tostring( v.status ), tostring( k ) )
+	    LambdaMod.printfc(0, "%-40s %-35s %-30s %-25s %-20s\n", ( v.name or "Unknown" ), ( v.version or "?" ), ( v.author or "Unknown" ), tostring( v.isluac and "COMPILED" or "INTERPRETED" ), tostring( v.status ))
 	end
   end
 end, "", "<version|refresh|list>" ) 
