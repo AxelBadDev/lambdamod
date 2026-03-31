@@ -1,8 +1,8 @@
---========= Copyleft ? 2026 hedv948-source, Some Rights Reserved ============--
+--========= Copyleft ? 2026 hedv948-source, Some Rights Reserved. ============--
 --                                                      
 -- Purpose: Extends the Lua String Library                                        
 --                                                      
---==========================================================================--
+--============================================================================--
 require( "string" )
 
 local string = string

@@ -1,3 +1,7 @@
+--[[ 
+   * Copyright (C) 2026 hedv948-source, All Rights Reserved
+   * Purpose:
+--]]
 require( "concommand" )
 
 local concommand = concommand
