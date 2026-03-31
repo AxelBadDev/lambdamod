@@ -1,23 +1,32 @@
---[[ 
-   * Copyright (C) 2026 hedv948-source, All Rights Reserved
-   * Purpose: Definition for LambdaMod
---]]
+--[[
 
+     Admin flags:
+     
+         DEFAULT                         0 [UNUSED]
+         
+         _ADMIN_GENERIC                   30    
+         _ADMIN_KICK                      40
+         _ADMIN_BAN                       50
+         _ADMIN_SLAY                      70
+         _ADMIN_CHEATS                    150
+         _ADMIN_ROOT                      200
+
+]]
 --includeC("define_admin.lua")
 if _G._DEFINES then return end
 _G._DEFINES = {}
 
 ---@class _G._DEFINES
-_G._DEFINES._VERSION = "2.4"
+_G._DEFINES._VERSION = "2.6"
 _G._DEFINES._BRANCH = "main"
-_G._DEFINES._BUILD = "0106"
+_G._DEFINES._BUILD = "0110"
 _G._DEFINES._GAME_VERSION = "1.1"
 _G._DEFINES._DEVELOPMENT = true
 
-_G.__LAMBDAMOD_VERSION 	 = _G._DEFINES._VERSION
-_G.__LAMBDAMOD_BRANCH 	  = _G._DEFINES._BRANCH
-_G.__LAMBDAMOD_BUILD 	   = _G._DEFINES._BUILD
-_G.__LAMBDAMOD_GAME_VERSION = _G._DEFINES._GAME_VERSION
+_G.LAMBDAMOD_VERSION 	 = _G._DEFINES._VERSION
+_G.LAMBDAMOD_BRANCH 	  = _G._DEFINES._BRANCH
+_G.LAMBDAMOD_BUILD 	   = _G._DEFINES._BUILD
+_G.LAMBDAMOD_GAME_VERSION = _G._DEFINES._GAME_VERSION
 
 _G._DEFINES._MONTHS = {
 	[1]  = "Jan",
@@ -36,7 +45,7 @@ _G._DEFINES._MONTHS = {
 local month = _G._DEFINES._MONTHS
 
 _G._DEFINES._BUILD_DATA = {
-	day = "26",
+	day = "31",
 	month = month[3],
 	year = "2026"
 }
