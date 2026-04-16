@@ -10,7 +10,7 @@ PLUGIN.myinfo =
 	description = "Basic Admin Commands",
 	version = LambdaMod.INFO._VERSION,
 	api = LambdaMod.Loader.api.version,
-	url = "https://github.com/hedv948-source"
+	url = "https://github.com/hedv948-source/lambdamod/"
 }
 
 local RegConsoleCmd = LambdaMod.cvar.RegConsoleCmd

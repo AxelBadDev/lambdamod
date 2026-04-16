@@ -9,7 +9,7 @@ PLUGIN.myinfo =
 	description = "Example",
 	version = LambdaMod.INFO._VERSION,
 	api = LambdaMod.Loader.api.version,
-	url = "https://github.com/hedv948-source"
+	url = "https://github.com/hedv948-source/lambdamod/"
 }
 
 function PLUGIN.OnPluginStart()
