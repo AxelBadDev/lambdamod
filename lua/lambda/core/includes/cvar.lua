@@ -3,23 +3,10 @@
    * Purpose:   
 --]]
 
-if _CLIENT then return end
-
-if _G.__LM_CCvar then return end
-_G.__LM_CCvar = true
-
-includeC( "lambdamod.lua" )
-include( "lambda/core/core.lua" )
-include( "lambda/core/shared.lua" )
-includeC( "libadmin.lua" )
-
-include( "lambda/config/admins.lua" )
-
-local concommand = require( "concommand" )
-LambdaMod = LambdaMod or {}
 LambdaMod.cvar = {}
 LambdaMod.cvar.Registered = {}
 LambdaMod.cvar.registeredAdmin = {}
+
 local registered = LambdaMod.cvar.Registered
 local cvar = LambdaMod.cvar
 local registeredAdmin = LambdaMod.cvar.registeredAdmin
@@ -33,14 +20,14 @@ function cvar.RegConsoleCmd(pName, pFn, pHelp, flags)
   registered[pName] = 
   {
     description = tostring( pHelp ) or "",
-	  fn = pFn
+	fn = pFn
   }
   
   concommand.Create(pName, pFn, pHelp, flags)
 end
-
+_G["_LM_CAdmins"] = {}
 function cvar.RegAdminCmd( pName, pFn, pHelp, flags )
-	if registered[ pName ] or registeredAdmin[ pName ] then 
+	if ( registered[ pName ] || registeredAdmin[ pName ] ) then 
 		LambdaMod.SRprintf( "%s Already registered\n", pName )
         return
     end
@@ -53,7 +40,7 @@ function cvar.RegAdminCmd( pName, pFn, pHelp, flags )
     cvar.RegConsoleCmd( pName, function( pPlayer, pCmd, pArg )
     	local name = pPlayer:GetPlayerName();
     	local pCBack     
-    	if not _G._LM_CAdmins[ name ] and not pPlayer:IsServer() then
+    	if ( ToBaseEntity( pPlayer ) != NULL && !LambdaMod.AdminCFG[ pPlayer:GetPlayerName() ].admin && !pPlayer:IsServer() ) then
     		LambdaMod.printfc( 3, "You don't have permission to use this command\n" );
     		return
     	end
@@ -64,16 +51,17 @@ end
 
 function cvar.RegServerCmd( pName, pFn, pHelp, flags )
 	if registered[ pName ] then 
-		LambdaMod.SRprintf( "%s Already registered\n", pName )
+		LambdaMod.Printfc( 3, "%s Already registered\n", pName )
+        return
 	end
 	
-	--registered[ pName ] = {
-		--description = tostring( pHelp ) or "",
-		--fn = pFn
-	--}
+	registered[ pName ] = {
+		description = tostring( pHelp ) or "",
+		fn = pFn
+	}
 	
-	cvar.RegConsoleCmd( pName, function( pPlayer, pCmd, pArg )
-		if not pPlayer:IsServer() then return end
+	concommand.Create( pName, function( pPlayer, pCmd, pArg )
+		if ( !pPlayer:IsServer() ) then return end
 		
 		pcall( registered[ pName ].fn, pPlayer, pCmd, pArg )
 	end, registered[ pName ].description, flags )
@@ -90,11 +78,17 @@ function cvar.RemoveConsoleCmd(pName)
 	end	
 end
 
-function cvar.SetValue( pCvar, pArg )
-  local GetConVar = cvar.FindVar
-	if _SERVER or not _CLIENT then
-		assert( (type(pCvar) == "string"), "bad argument #1 to 'SetValue' (string expected got " .. type(pCvar) .. ")")
-		assert( (type(pArg) == "string"), "bad argument #2 to 'SetValue' (string expected got " .. type(pArg) .. ")")
-		GetConVar( pCvar ):SetValue( pArg )
+function cvar.SetValue( cvarStr, value )
+	if ( !SERVER || CLIENT ) then
+		return
 	end
+    
+    assert( (type( cvarStr ) == "string"), "bad argument #1 to 'SetValue' (string expected got " .. type(pCvar) .. ")")
+	--assert( (type( value ) == "string"), "bad argument #2 to 'SetValue' (string expected got " .. type(pArg) .. ")")
+	local pCvar = cvar.FindVar( cvarStr )
+    if ( !pCvar ) then
+        LambdaMod.Printfc(3, "SetValue: Unknown command: %s\n", cvarStr )
+        return
+    end
+    pCvar:SetValue( tostring( value ) )    
 end

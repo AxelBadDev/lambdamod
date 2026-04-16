@@ -2,10 +2,6 @@
    * Copyright (C) 2026 hedv948-source, All Rights Reserved
    * Purpose: Admin Command parser
 --]]
-if _G.__LM_CAdmin then return end
-_G.__LM_CAdmin = true
-
-LambdaMod = LambdaMod or {}
 LambdaMod.LibAdmin = {}
 local LibAdmin = LambdaMod.LibAdmin
 

@@ -2,16 +2,11 @@
    * Copyright (C) 2026 hedv948-source, All Rights Reserved
    * Purpose: VScript implemention
 --]]
-if _CLIENT then return end
 
-if _G.__LM_CVScript then return end
-_G.__LM_CVScript = true
-
-local timer = require( "timer" )
-
-LambdaMod = LambdaMod or {}
 LambdaMod.vscript = {}
 LambdaMod.vscript.util = {}
+
+local timer = require( "timer" )
 
 local vscript = LambdaMod.vscript
 
@@ -20,7 +15,7 @@ function vscript.Run(...) end
 function vscript.EntFire(targetname, inp, pString, delay, activator, caller)
     local entity = gEntList.FindEntityByClassname(NULL, targetname)
 	libvscript.log_printf("Fired Entity '%s', input '%s', string '%s', delay '%s'\n", tostring(targetname), tostring(inp), tostring(str), tostring(delay))
-    while entity:GetBaseEntity() ~= NULL do 
+    while entity:GetBaseEntity() != NULL do 
 	
         entity:Fire( inp, pString, ( delay or 0 ), activator, caller )
 

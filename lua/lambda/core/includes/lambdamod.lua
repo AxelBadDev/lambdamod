@@ -3,35 +3,43 @@
    * Purpose: 
 --]]
 
-if CLIENT or _CLIENT then return end
-
-include( "lambda/core/shared.lua" )
-include( "lambda/core/core.lua" )
-include( "lambda/core/includes/cvar.lua" )
-include( "lambda/core/includes/libadmin.lua" )
-include( "lambda/core/includes/vscript.lua" )
-
-if _G.__LM_CCmd then return end
-_G.__LM_CCmd = true
 
 local FCVAR_HIDDEN = FCVAR_HIDDEN or _E.FCVAR_HIDDEN
 
-LambdaMod = LambdaMod or {}
-
-LambdaMod.Registered = {}
+LambdaMod.Registered  = {}
+LambdaMod.RegisteredB = {}
 
 function LambdaMod.AddCommand(pName, pFn, pHelp, pHelpArg)
-	if (LambdaMod.Registered[pName]) then
-		if _SERVER then
-			SRprintf("[SERVER] LambdaMod.AddCommand: Command already exists (%s)\n", tostring( pName) );
-		elseif _CLIENT then
-			SRprintf("[CLIENT] LambdaMod.AddCommand: Command already exists (%s)\n", tostring( pName ) );
+	if ( LambdaMod.Registered[ pName ] ) then
+		if ( SERVER ) then
+			LambdaMod.Printfc(3, "[SERVER] LambdaMod.AddCommand: Command already exists (%s)\n", tostring( pName) );
+		elseif ( CLIENT ) then
+			LambdaMod.Printfc(3, "[CLIENT] LambdaMod.AddCommand: Command already exists (%s)\n", tostring( pName ) );
 		end
 		return;
 	end
 	--if type(pFn) ~= "function" then return end
 	LambdaMod.printfc(5, "Registered Commands: %s\n", tostring(pName))
-	LambdaMod.Registered[pName] =
+	LambdaMod.Registered[ pName ] =
+	{ 
+		func = pFn,
+		help = pHelp or "",
+		helpArg = pHelpArg or ""
+	}
+end
+
+function LambdaMod.AddCommandB(pName, pFn, pHelp, pHelpArg)
+	if (LambdaMod.RegisteredB[pName]) then
+		if _SERVER then
+			SRprintf("[SERVER] LambdaMod.AddCommandB: Command already exists (%s)\n", tostring( pName) );
+		elseif _CLIENT then
+			SRprintf("[CLIENT] LambdaMod.AddCommandB: Command already exists (%s)\n", tostring( pName ) );
+		end
+		return;
+	end
+	--if type(pFn) ~= "function" then return end
+	LambdaMod.printfc(5, "Registered Commands: %s\n", tostring(pName))
+	LambdaMod.RegisteredB[pName] =
 	{ 
 		func = pFn,
 		help = pHelp or "",
@@ -46,30 +54,47 @@ function LambdaMod.ListCommand()
 end
 --- Running a non console command
 function LambdaMod.RunCommand(pPlayer, cmd, arg)
-    if not LambdaMod.Registered or LambdaMod.Registered == nil then return end 
+    if ( !LambdaMod.Registered || LambdaMod.Registered == nil ) then return end 
 	--if pPlayer   
     --if(!cmd)
-	if not cmd then return end
+	if ( !cmd ) then return end
     --if(!LambdaMod.Registered[cmd])
-	if not (LambdaMod.Registered[cmd]) then
+	if ( !LambdaMod.Registered[ cmd ] ) then
          LambdaMod.printfc(3, "Unknown command: \"%s\"\n", tostring( cmd ) )
          return
 	end
 	
 	local ok, err = pcall(LambdaMod.Registered[cmd].func, pPlayer, cmd, arg)
+	if ( !ok ) then
+	  LambdaMod.printfc(3, "Failed to run \"%s\" : %s\n", cmd, tostring(err))
+	end
+end
+
+function LambdaMod.RunCommandB( pPlayer, args )
+    if not LambdaMod.RegisteredB or LambdaMod.RegisteredB == nil then return end 
+	--if pPlayer   
+    --if(!cmd)
+	if not args[1] then return end
+    --if(!LambdaMod.Registered[cmd])
+	if not (LambdaMod.RegisteredB[ args[1] ]) then
+         LambdaMod.printfc(3, "Unknown command: \"%s\"\n", tostring( args ) )
+         return
+	end
+	
+	local ok, err = pcall(LambdaMod.RegisteredB[args[1]].func, pPlayer, args )
 	if not ok then
 	  LambdaMod.printfc(3, "Exception: %s\n", tostring(err))
 	end
 end
 --LambdaMod.AddCommand( pName, pFn, pHelp, pHelpArg)
 
-LambdaMod.AddCommand( "version", function( ply, cmd, arg )
-	LambdaMod.printfc(0, "LambdaMod version: %s\n", tostring( LambdaMod.INFO._VERSION ))
-	LambdaMod.printfc(0, "Builded on: %s\n", tostring( LambdaMod.INFO._BUILD_DATE ))
+LambdaMod.AddCommand( "version", function( ply, cmd, args )
+	LambdaMod.printfc(0, "LambdaMod version: %s\n", tostring( LambdaMod["VERSION"] ))
+	LambdaMod.printfc(0, "Builded on: %s\n", tostring( LambdaMod["BUILD_DATE"] ))
 	--LambdaMod.printfc(0, "Branch: %s\n", tostring( LambdaMod.INFO._BRANCH ))
 end, "", "" )
 
-LambdaMod.AddCommand( "cmds", function( ply, cmd, arg )
+LambdaMod.AddCommand( "cmds", function( ply, cmd, args )
 	LambdaMod.printfc(0, "%-25s %-20s\n", "Command(s)", "Description")
 	
     for k, v in pairs(LambdaMod.cvar.Registered) do
@@ -78,13 +103,13 @@ LambdaMod.AddCommand( "cmds", function( ply, cmd, arg )
     end      
 end, "", "" )
 
-LambdaMod.AddCommand( "dump", function( ply, cmd, arg )
+LambdaMod.AddCommand( "dump", function( ply, cmd, args )
 	for k in pairs( LambdaMod ) do
 		LambdaMod.printfc(0, "%s\n", tostring( k ))
 	end
 end, "Dumps LambdaMod table", "" )
 
-LambdaMod.AddCommand( "credits", function( ply, cmd, arg )
-	LambdaMod.printfc(0, "LambdaMod was developed by:\n  Plugin Loader: originally made by YourLocalCappy hedv948-source\n  HL2SB++: YourLocalMoon/ThePixelMoon\n  Inspired by Metamod:Source/SourceMod made by AlliedModders\n  LambdaMod made by hedv948-source\n")
+LambdaMod.AddCommand( "credits", function( ply, cmd, args )
+	LambdaMod.printfc(0, "LambdaMod was developed by:\n  PluginLoader: originally made by YourLocalCappy modified by hedv948-source\n  HL2SB++: YourLocalMoon/ThePixelMoon\n  Inspired by Metamod:Source/SourceMod made by AlliedModders\n  LambdaMod made by hedv948-source\n")
 end, "Credits", "" )
 
