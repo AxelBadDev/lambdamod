@@ -7,7 +7,7 @@
 LambdaMod = LambdaMod or {}
 
 ---@class LambdaMod
-LambdaMod["VERSION"] = "2.6"
+LambdaMod["VERSION"] = "2.7"
 LambdaMod["BRANCH"] = "main"
 LambdaMod["BUILD"] = "0110"
 LambdaMod["GAME_VERSION"] = "1.1"
@@ -94,11 +94,11 @@ LambdaMod["INFO"] =
 	_BUILD       = LambdaMod["BUILD"] or "0",
 
 	_BUILD_DATE  = string.format( 
-		"%s %s %s",	
-		tostring(( LambdaMod["BUILD_DATA"].month or "Jan" )), 
-		tostring(( LambdaMod["BUILD_DATA"].day or "1" )), 
-		tostring(( LambdaMod["BUILD_DATA"].year or "1970" )) 
-	)
+                        "%s %s %s",	
+                        tostring(( LambdaMod["BUILD_DATA"].month or "Jan" )), 
+                        tostring(( LambdaMod["BUILD_DATA"].day or "1" )), 
+                        tostring(( LambdaMod["BUILD_DATA"].year or "1970" )) 
+                   )
 }
 
 function LambdaMod.SanitizeCommandName(name)
@@ -162,7 +162,7 @@ local function includeFolder( path )
      end 
        
     for _, v in ipairs( files ) do
-        LambdaMod.Printfc( 1, "%s LambdaMod -> included %s.\n", gameSide, ( path .. v ) )
+        LambdaMod.Printfc( 1, "%s LambdaMod -> included %s.\n", gameSide, ( fullPath_2 .. v ) )
         include(  fullPath_2 ..  v )
     end
 end        
