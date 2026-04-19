@@ -3,16 +3,14 @@
    * Purpose: VScript implemention
 --]]
 
-LambdaMod.vscript = {}
-LambdaMod.vscript.util = {}
+LambdaMod.VscriptMgr = {}
+LambdaMod.VscriptMgr.util = {}
 
 local timer = require( "timer" )
 
-local vscript = LambdaMod.vscript
+local VscriptMgr = LambdaMod.VscriptMgr
 
-function vscript.Run(...) end
-
-function vscript.EntFire(targetname, inp, pString, delay, activator, caller)
+function VscriptMgr.EntFire(targetname, inp, pString, delay, activator, caller)
     local entity = gEntList.FindEntityByClassname(NULL, targetname)
 	libvscript.log_printf("Fired Entity '%s', input '%s', string '%s', delay '%s'\n", tostring(targetname), tostring(inp), tostring(str), tostring(delay))
     while entity:GetBaseEntity() != NULL do 
@@ -23,7 +21,7 @@ function vscript.EntFire(targetname, inp, pString, delay, activator, caller)
     end
 end
 
-function vscript.FireServer(cmd, delay)
+function VscriptMgr.FireServer(cmd, delay)
 	timer.Simple( ( delay or 0 ), function()
 		LambdaMod.Core.ForwardToConsole( cmd )
 	end)
@@ -40,7 +38,7 @@ function CBaseEntity:Fire(inputName, value, delay, activator, caller)
 
 ]]
 
-function vscript.FireCMD(cmd)
+function VscriptMgr.FireCMD(cmd)
 	libvscript.log_printf("Engine: Running Command (%s)\n", tostring( cmd ) )
 	if SERVER then
 		engine.ServerCommand(cmd)
@@ -51,7 +49,7 @@ end
 
 
 
-function vscript.GetMapName()
+function VscriptMgr.GetMapName()
 	local worldspawn = gEntList.FindEntityByClassname(NULL, "worldspawn"):GetModelName()
 	local MapName = string.sub(worldspawn, 6, -5) 
 	return MapName

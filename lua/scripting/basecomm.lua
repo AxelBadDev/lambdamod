@@ -16,40 +16,39 @@ PLUGIN.myinfo =
 
 local RegConsoleCmd = LambdaMod.cvar.RegConsoleCmd
 local RegAdminCmd = LambdaMod.cvar.RegAdminCmd
+local LogAction = LambdaMod.LogAction
 local LibAdmin = LambdaMod.LibAdmin
 
 local hook = require( "hook" )
-local GaggedPlayers = {}
+local GaggedPlayers = LambdaMod.GaggedPlayers 
 
 function PerformGag( pCaller, pTargets )
+    LogAction( "%s triggered lambda_gag", pCaller:GetPlayerName() )
+    
 	local targets = LibAdmin.ParseTargets( pTargets, pCaller )
 	
 	for _, t in ipairs( targets ) do
-        GaggedPlayers[ t ] = true
+        LogAction( "Gagged player: %s", t:GetPlayerName() )
+        GaggedPlayers[ t:GetPlayerName() ] = true
     end
-    LambdaMod.printfc( 0, "Gagged %s player(s)\n", tostring( #targets ) )
+    LambdaMod.Printfc( 0, "Gagged %s player(s)\n", tostring( #targets ) )
 end
 
 function PerformUnGag( pCaller, pTargets )
+    LogAction( "%s triggered lambda_ungag", pCaller:GetPlayerName() )
 	local targets = LibAdmin.ParseTargets( pTargets, pCaller )
 	
 	for _, t in ipairs( targets ) do
-        GaggedPlayers[ t ] = nil
+        LogAction( "Ungagged player: %s", t:GetPlayerName() )
+        GaggedPlayers[ t:GetPlayerName() ] = nil
     end
-    LambdaMod.printfc( 0, "Ungagged %s player(s)\n", tostring( #targets ) )
+    LambdaMod.Printfc( 0, "Ungagged %s player(s)\n", tostring( #targets ) )
 end
-
-hook.add( "Host_Say", "Lambda::CheckGag", function( pPlayer, msg, teamonly )
-    if GaggedPlayers[ pPlayer ] then
-        LambdaMod.printfc(0, "%s tried to chat but is gagged.\n", tostring( pPlayer:GetPlayerName() ) )
-        return false -- block the fucking message
-    end
-end )
 
 local function StartHooks()	
 end
 
-function PLUGIN.OnPluginStart()
+function PLUGIN:OnPluginStart()
 	RegAdminCmd( "lambda_gag", function( ply, cmd, arg )
 		if not arg or arg == "" then 
 			LambdaMod.printfc( 0, "Usage: lambda_gag <player|me|others|all>\n" ) 

@@ -10,7 +10,7 @@ PLUGIN.myinfo =
 	description = "Basic Admin Commands",
 	version = LambdaMod.INFO._VERSION,
 	api = LambdaMod.Loader.api.version,
-	url = "https://github.com/hedv948-source/lambdamod/"
+	url = "https://github.com/hedv948-source"
 }
 
 local RegConsoleCmd = LambdaMod.cvar.RegConsoleCmd
@@ -30,7 +30,7 @@ local function PerformKick( pCaller, pTargets )
 	end
 end
 
-function PLUGIN.OnPluginStart()
+function PLUGIN:OnPluginStart()
 	RegAdminCmd( "lambda_kick", function( ply, cmd, arg )
 		if not arg or arg == "" then LambdaMod.printfc(0, "Usage: lambda_kick <player|me|others|all>\n") return end
 		PerformKick( ply, arg )

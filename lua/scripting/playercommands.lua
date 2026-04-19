@@ -9,7 +9,7 @@ PLUGIN.myinfo =
 	author = "hedv948-source",
 	description = "Misc. Player Commands",
 	version = LambdaMod.INFO._VERSION,
-	api = LambdaMod.CLoader.api.version,
+	api = LambdaMod.Loader.api.version,
 	url = "https://github.com/hedv948-source/lambdamod/"
 }
 
