@@ -7,14 +7,13 @@
 PLUGIN.myinfo = 
 {
 	name = "Player Commands",
-	author = "hedv948-source",
+	author = "AxelBadDev",
 	description = "Misc. Player Commands",
 	version = LAMBDAMOD_VERSION,
 	api = LAMBDAMOD_API_VERSION,
-	url = "https://github.com/hedv948-source/lambdamod/"
+	url = "https://github.com/AxelBadDev/lambdamod/"
 }
 
---PLUGIN:SetAsRequired( "SourceMod" )
 PLUGIN:Include( "LambdaMod" )
 PLUGIN:Include( "ChatCmd" )
 PLUGIN:Include( "Hook" )

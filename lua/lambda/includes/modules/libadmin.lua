@@ -11,7 +11,7 @@ function LibAdmin.CheckCommandAccess( pPlayer, pCmd, flag ) end
 --- Parse player commands
 ---@param arg string
 ---@param caller CBasePlayer
----@return table
+---@return CBasePlayer[]
 function LibAdmin.ParseTargets( arg, caller )
     local results = {}
 
@@ -50,6 +50,30 @@ function LibAdmin.ParseTargets( arg, caller )
         end
         return results
     end
+    
+    if ( lowerArg == "bots" ) then
+        for i = 1, gpGlobals.maxClients() do
+            local ply = UTIL.PlayerByIndex( i )
+            if ( ply && ply:IsBot() ) then addIfUnique( ply ) end
+        end
+        return results
+    end    
+    
+    if ( lowerArg == "alive" ) then
+        for i = 1, gpGlobals.maxClients() do
+            local ply = UTIL.PlayerByIndex( i )
+            if ( ply && ply:IsAlive() ) then addIfUnique( ply ) end
+        end
+        return results
+    end 
+    
+    if ( lowerArg == "dead" ) then
+        for i = 1, gpGlobals.maxClients() do
+            local ply = UTIL.PlayerByIndex( i )
+            if ( ply && !ply:IsAlive() ) then addIfUnique( ply ) end
+        end
+        return results
+    end    
 
     -- numeric index e.g. "!target 3"
     local idx = tonumber( arg )

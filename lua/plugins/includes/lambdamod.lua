@@ -6,11 +6,11 @@
 
 LIBRARY:RegLibrary( {
     name = "LambdaMod",
-    author = "hedv948-source",
+    author = "AxelBadDev",
     description = "LambdaMod interface",
     version = LAMBDAMOD_VERSION,
     api = LAMBDAMOD_API_VERSION,
-    url = "https://github.com/hedv948-source/lambdamod/"
+    url = "https://github.com/AxelBadDev/lambdamod/"
 } )
 
 function LIBRARY:Damage( pCaller, pPlayer, pDamage )

@@ -6,11 +6,11 @@
 
 LIBRARY:RegLibrary {
     name = "Vote",
-    author = "hedv948-source",
+    author = "AxelBadDev",
     description = "Voting library",
     version = LAMBDAMOD_VERSION,
     api = LAMBDAMOD_API_VERSION,
-    url = "https://github.com/hedv948-source/lambdamod/"
+    url = "https://github.com/AxelBadDev/lambdamod/"
 }
 
 LIBRARY.isVoteStarted = false

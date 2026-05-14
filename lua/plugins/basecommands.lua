@@ -7,11 +7,11 @@
 PLUGIN.myinfo = 
 {
 	name = "Basic Commands",
-	author = "hedv948-source",
+	author = "AxelBadDev",
 	description = "Basic Admin Commands",
 	version = LAMBDAMOD_VERSION,
 	api = LAMBDAMOD_API_VERSION,
-	url = "https://github.com/hedv948-source"
+	url = "https://github.com/AxelBadDev/lambdamod"
 }
 PLUGIN:Include( "LambdaMod" )
 PLUGIN:Include( "ChatCmd" )

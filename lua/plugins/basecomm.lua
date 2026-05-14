@@ -7,11 +7,11 @@
 PLUGIN.myinfo = 
 {
 	name = "Basic Comm Controls",
-	author = "hedv948-source",
+	author = "AxelBadDev",
 	description = "Provides methods of controlling communication.",
 	version = LAMBDAMOD_VERSION,
 	api = LAMBDAMOD_API_VERSION,
-	url = "https://github.com/hedv948-source/lambdamod/"
+	url = "https://github.com/AxelBadDev/lambdamod/"
 }
 
 LambdaMod.CreateTable( false, "GaggedPlayers" )

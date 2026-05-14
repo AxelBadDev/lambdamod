@@ -6,11 +6,11 @@
 
 LIBRARY:RegLibrary( {
     name = "ChatCmd",
-    author = "hedv948-source",
+    author = "AxelBadDev",
     description = "Chat command interface",
     version = LAMBDAMOD_VERSION,
     api = LAMBDAMOD_API_VERSION,
-    url = "https://github.com/hedv948-source/lambdamod/"
+    url = "https://github.com/AxelBadDev/lambdamod/"
 } )
 
 function LIBRARY:AddCmd( pName, func, desc, aliases )

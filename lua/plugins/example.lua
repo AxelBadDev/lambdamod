@@ -7,11 +7,11 @@
 PLUGIN.myinfo = 
 {
 	name = "Example",
-	author = "hedv948-source",
+	author = "AxelBadDev",
 	description = "Example",
 	version = LambdaMod.INFO._VERSION,
 	api = LAMBDAMOD_API_VERSION,
-	url = "https://github.com/hedv948-source"
+	url = "https://github.com/AxelBadDev/lambdamod"
 }
 
 function PLUGIN:OnPluginStart()

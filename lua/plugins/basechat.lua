@@ -7,11 +7,11 @@
 PLUGIN.myinfo = 
 {
 	name = "Basic Chat",
-	author = "hedv948-source",
+	author = "AxelBadDev",
 	description = "Basic Communication Commands",
 	version = LAMBDAMOD_VERSION,
 	api = LAMBDAMOD_API_VERSION,
-	url = "https://github.com/hedv948-source/lambdamod/"
+	url = "https://github.com/AxelBadDev/lambdamod/"
 }
 
 local RegConsoleCmd = LambdaMod.cvar.RegConsoleCmd
