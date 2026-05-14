@@ -7,7 +7,7 @@
 LIBRARY:RegLibrary {
   name = "Admin Base",
   description = "Basic admin interface",
-  author = "AxelBadDev"
+  author = "AxelBadDev",
   version = LAMBDAMOD_VERSION,
   api = 13,
   url = "https://github.com/AxelBadDev/lambdamod"
