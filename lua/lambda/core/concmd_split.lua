@@ -1,15 +1,11 @@
---============== Copyright (C) 2026 AxelBadDev, All Rights Reserved ==========--
+--========== Copyright (C) 2026 hedv948-source, All Rights Reserved ==========--
 --
--- Purpose: 
+-- Purpose: string spliting for convars
 --
 --============================================================================--
-module( "extstring", package.seeall )
+_CONSPLIT = _CONSPLIT or {}
 
-local string = string
-local table = table
-local error = error
-
-function Q_cmdsplit( text )
+function _CONSPLIT.Q_cmdsplit( text )
   local spat, epat, buf, quoted = [=[^(['"])]=], [=[(['"])$]=]
 
   local parts = {}
@@ -35,3 +31,5 @@ function Q_cmdsplit( text )
   
   return parts
 end
+
+return _CONSPLIT

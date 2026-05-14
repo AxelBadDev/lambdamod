@@ -1,12 +1,17 @@
---[[ 
-   * Copyright (C) 2026 hedv948-source, All Rights Reserved
-   * Purpose: Admin Command parser
---]]
+--============== Copyright (C) 2026 AxelBadDev, All Rights Reserved ==========--
+--
+-- Purpose: Admib command argument parser
+--
+--============================================================================--
 LambdaMod.LibAdmin = {}
 local LibAdmin = LambdaMod.LibAdmin
 
 function LibAdmin.CheckCommandAccess( pPlayer, pCmd, flag ) end
 
+--- Parse player commands
+---@param arg string
+---@param caller CBasePlayer
+---@return table
 function LibAdmin.ParseTargets( arg, caller )
     local results = {}
 

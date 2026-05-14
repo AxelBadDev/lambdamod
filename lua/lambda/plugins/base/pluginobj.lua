@@ -1,8 +1,8 @@
---========= Copyright (C) 2026 hedv948-source, All Rights Reserved ============--
---                                                      
--- Purpose: Create plugin object                                
---                                                      
---=============================================================================--
+--============== Copyright (C) 2026 AxelBadDev, All Rights Reserved ==========--
+--
+-- Purpose: Scripted plugin object
+--
+--============================================================================--
 
 PluginObj = {}
 
@@ -18,11 +18,13 @@ function PluginObj:CreateObj()
         author = "Unknown",
         description = "A description",
         version = "?",
-        api = "9",
+        api = LAMBDAMOD_API_VERSION,
         url = ""
     }
     --o.LIBRARY
     o.REQUIRED = {}
+    o.path = nil
+    o.__LOAD_STATUS = LAMBDAMOD_PLUGIN_UNLOADED
     o.__DEFINES = {}
     
     return o
@@ -38,13 +40,28 @@ function PluginObj:SetAsRequired( data )
             table.insert( self.REQUIRED, v )
         end
     end    
-end    
-     
-
-function PluginObj.AddHook( pName, pFn )
-    LambdaHook.Add( pName, pFn )
 end
 
+function PluginObj:SetState( var )
+    self.__LOAD_STATUS = var
+end        
+  
+function PluginObj:GetState()
+    return self.__LOAD_STATUS 
+end    
+
+function PluginObj:AddHook( pName, pFn )
+    LambdaHook.Simple( pName, pFn )
+end
+
+function PluginObj:isCompatible()
+    for i, v in ipairs( LambdaMod.Enum.PluginCompatible ) do
+        if ( self.api == LAMBDAMOD_API_VERSION || self.api == v ) then return true end
+    end
+    return false
+end    
+
+            
 --[[ 
 function PluginObj:RegPluginLibrary( name )
   if ( LambdaMod.__REG_LIBRARIES[ name ]) then return end
@@ -70,13 +87,13 @@ function PluginObj:findRequiredDependencies()
   -- This is spaghetti
   local list = {}
   for _, v in ipairs( self.REQUIRED ) do
-    if not LambdaMod.__REG_LIBRARIES[ v ] then
+    if not LambdaMod.__libraries[ v ] then
       table.insert( list, v )
     end
   end
   
   for k, v in ipairs( self.REQUIRED ) do
-    if not LambdaMod.__REG_LIBRARIES[ v ] then
+    if not LambdaMod.__libraries[ v ] then
       return true, list
     end
   end  
@@ -86,16 +103,17 @@ end
 
 function PluginObj:Include( pName )
     if( !pName || pName == "" ) then return end
-    if( !LambdaMod.__REG_LIBRARIES[ pName ] ) then 
-        dbg.Warning( 
-            "library '"..pName.."' not found: \n\t"
-            .. "no field: LambdaMod.__REG_LIBRARIES['" .. pName .. "']\n"
+    if( !LambdaMod.__libraries[ pName ] ) then 
+        self.__LOAD_STATUS = LAMBDAMOD_PLUGIN_ERROR
+        error( 
+            "unable to load library '"..pName.."': \n\t"
+            .. "no field: LambdaMod.__libraries['" .. pName .. "']",
+            2
         )
-        return 
     end
     self:SetAsRequired( pName )
     
-    local temp = table.copy( LambdaMod.__REG_LIBRARIES[ pName ] )
+    local temp = table.copy( LambdaMod.__libraries[ pName ] )
         
     self[ pName ] = temp
 end    

@@ -1,3 +1,9 @@
+--============== Copyright (C) 2026 AxelBadDev, All Rights Reserved ==========--
+--
+-- Purpose: 
+--
+--============================================================================--
+
 LIBRARY:RegLibrary( {
     name = "Hook",
     author = "hedv948-source",

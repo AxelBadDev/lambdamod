@@ -1,3 +1,9 @@
+--============== Copyright (C) 2026 AxelBadDev, All Rights Reserved ==========--
+--
+-- Purpose: 
+--
+--============================================================================--
+
 LambdaHook = LambdaHook or {}
 LambdaHook.tHooks = {}
 local tHooks = LambdaHook.tHooks

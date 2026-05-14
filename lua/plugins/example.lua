@@ -1,3 +1,9 @@
+--============== Copyright (C) 2026 AxelBadDev, All Rights Reserved ==========--
+--
+-- Purpose: Example for plugin
+--
+--============================================================================--
+
 PLUGIN.myinfo = 
 {
 	name = "Example",

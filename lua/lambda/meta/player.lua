@@ -1,3 +1,9 @@
+--============== Copyright (C) 2026 AxelBadDev, All Rights Reserved ==========--
+--
+-- Purpose: 
+--
+--============================================================================--
+
 local getmetatable = getmetatable
 local setmetatable = setmetatable
 --local CBasePlayer = _R.CBasePlayer

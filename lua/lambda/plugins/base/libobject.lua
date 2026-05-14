@@ -1,5 +1,22 @@
+--============== Copyright (C) 2026 AxelBadDev, All Rights Reserved ==========--
+--
+-- Purpose: Scripted library object
+--
+--============================================================================--
+
+---@class LibraryObj
+
+---@field name string
+---@field author string
+---@field description string
+---@field version string|number
+---@field api string|number
+---@field url string
+
 LibraryObj = {}
 
+---@method Create
+---@return userdata
 function LibraryObj:Create()
     local o = {} 
     
@@ -13,12 +30,14 @@ function LibraryObj:Create()
     o.api = "9"
     o.url = ""
     --o.LIBRARY
+    o.path = nil
     o.__REQUIRED = {}
     
     return o
 end
 
-
+---@method SetAsRequired
+--- Sets library as required
 function LibraryObj:SetAsRequired( data )
     if ( type( data ) == "string" ) then
         table.insert( self.__REQUIRED, data )
@@ -29,31 +48,10 @@ function LibraryObj:SetAsRequired( data )
     end    
 end    
 
-function LibraryObj:findRequiredDependencies()
-  if( #self.__REQUIRED == 0 ) then return end
-  
-  -- I hate this but we're use like this for now
-  -- This is spaghetti
-  local list = {}
-  for _, v in ipairs( self.__REQUIRED ) do
-    if not LambdaMod.__REG_LIBRARIES[ v ] then
-      table.insert( list, v )
-    end
-  end
-  
-  for k, v in ipairs( self.__REQUIRED ) do
-    if not LambdaMod.__REG_LIBRARIES[ v ] then
-      return true, list
-    end
-  end  
-  
-  return false, nil
-end  
 
-function LibraryObj:DefineName( pName )
-    self.name = pName
-end    
-
+--- Register a library data
+---@method RegLibrary
+---@param data table
 function LibraryObj:RegLibrary( data )
     assert( type( data ) == "table", "bad argument #1 to method 'RegLibrary' (table expected got "..type( data ) .. ")")
     self.name = data.name
@@ -64,6 +62,8 @@ function LibraryObj:RegLibrary( data )
     self.url = data.url
 end    
 
+---@method GetLibraryInfo
+---@return table 
 function LibraryObj:GetLibraryInfo()
     local t = table.copy( self )
     local temp = {}
@@ -74,5 +74,5 @@ function LibraryObj:GetLibraryInfo()
     temp.api = t.api
     temp.url = t.url
     return temp
-end    
+end 
 return LibraryObj

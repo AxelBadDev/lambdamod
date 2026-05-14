@@ -1,6 +1,10 @@
+--============== Copyright (C) 2026 AxelBadDev, All Rights Reserved ==========--
+--
+-- Purpose: 
+--
+--============================================================================--
 require( "filesystem" )
 
---- @module easyfs
 module( "easyfs", package.seeall )
 
 local FILESYSTEM_INVALID_HANDLE = nil

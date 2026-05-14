@@ -1,9 +1,11 @@
---[[ 
-   * Copyright (C) 2026 hedv948-source, All Rights Reserved
-   * Purpose:   
---]]
+--============== Copyright (C) 2026 AxelBadDev, All Rights Reserved ==========--
+--
+-- Purpose: Console command interface
+--
+--============================================================================--
 
 LambdaMod.cvar = {}
+
 LambdaMod.cvar.Registered = {}
 LambdaMod.cvar.registeredAdmin = {}
 
@@ -11,6 +13,11 @@ local registered = LambdaMod.cvar.Registered
 local cvar = LambdaMod.cvar
 local registeredAdmin = LambdaMod.cvar.registeredAdmin
 
+--- Register a console command (concommand wrapper)
+---@param pName string
+---@param pFn function
+---@param pHelp? string
+---@param flags integer
 function cvar.RegConsoleCmd(pName, pFn, pHelp, flags)
   if(registered[pName]) then 
     LambdaMod.CPrintf( 3, "%s Already registered\n", pName)
@@ -31,6 +38,11 @@ local function tobool( val )
 	return true
 end
 
+--- Register an admin console command
+---@param pName string
+---@param pFn function
+---@param pHelp? string
+---@param flags integer
 function cvar.RegAdminCmd( pName, pFn, pHelp, flags )
 	if ( registered[ pName ] || registeredAdmin[ pName ] ) then 
 		LambdaMod.CPrintf( 3, "%s Already registered\n", pName )
@@ -49,11 +61,22 @@ function cvar.RegAdminCmd( pName, pFn, pHelp, flags )
     		LambdaMod.printfc( 3, "You don't have permission to use this command\n" );
     		return
     	end
-    	pcall( registeredAdmin[ pName ].fn, pPlayer, pCmd, pArg )
+    	local ok, out = pcall( registeredAdmin[ pName ].fn, pPlayer, pCmd, pArg )
+        
+        if( !ok ) then
+            dbg.Warning("Failed to run '"..pName.."': " .. tostring( out ) .. "\n" )
+            return
+        end    
     end, registeredAdmin[ pName ].description, flags )
    
 end
 
+
+--- Register a server console command (concommand wrapper)
+---@param pName string
+---@param pFn function
+---@param pHelp? string
+---@param flags integer
 function cvar.RegServerCmd( pName, pFn, pHelp, flags )
 	if registered[ pName ] then 
 		LambdaMod.CPrintf( 3, "%s Already registered\n", pName )
@@ -68,10 +91,16 @@ function cvar.RegServerCmd( pName, pFn, pHelp, flags )
 	concommand.Create( pName, function( pPlayer, pCmd, pArg )
 		if ( !pPlayer:IsServer() ) then return end
 		
-		pcall( registered[ pName ].fn, pPlayer, pCmd, pArg )
+		local ok, out = pcall( registered[ pName ].fn, pPlayer, pCmd, pArg )
+        if( !ok ) then
+            dbg.Warning("Failed to run '"..pName.."': " .. tostring( out ) .. "\n" )
+            return
+        end    
 	end, registered[ pName ].description, flags )
 end
   
+--- Removes a console command
+---@param pName string
 function cvar.RemoveConsoleCmd(pName)
 	if registeredAdmin[ pName ] then
 		registeredAdmin[ pName ] = nil
@@ -91,7 +120,7 @@ function cvar.SetValue( cvarStr, value )
     assert( (type( cvarStr ) == "string"), "bad argument #1 to 'SetValue' (string expected got " .. type(pCvar) .. ")")
 	--assert( (type( value ) == "string"), "bad argument #2 to 'SetValue' (string expected got " .. type(pArg) .. ")")
 	local pCvar = cvar.FindVar( cvarStr )
-    if ( !pCvar ) then
+    if ( !pCvar:IsCommand()) then
         LambdaMod.Printfc(3, "SetValue: Unknown command: %s\n", cvarStr )
         return
     end

@@ -1,3 +1,9 @@
+--============== Copyright (C) 2026 AxelBadDev, All Rights Reserved ==========--
+--
+-- Purpose: 
+--
+--============================================================================--
+
 PLUGIN.myinfo = 
 {
 	name = "Player Commands",
@@ -28,9 +34,9 @@ function PLUGIN:OnPluginStart()
         self.LambdaMod:LogAction( "Slayed", #pTargets, "player(s)")
     end, "" )       
     
-    self.ChatCmd:AddCmd( "slay", function( ply, args ) 
+    self.ChatCmd:AddAdminCmd( "slay", function( ply, args ) 
         local targetArg = args[ 1 ]
-        if !targetArg then return "Usage: /kick <player|me|all|others|index>" end
+        if !targetArg then return "Usage: /slay player|me|all|others|index>" end
         
         local targets = self.LambdaMod:ParseTargets( targetArg, ply )
         
@@ -39,5 +45,7 @@ function PLUGIN:OnPluginStart()
         end
         
         return "Slayed " .. #targets .. " player(s)"
-     end, "Instantly kill target(s)", { "kill" } ) 
+        
+     end, "Instantly kill target(s)" ) 
+     
 end

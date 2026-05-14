@@ -1,3 +1,9 @@
+--============== Copyright (C) 2026 AxelBadDev, All Rights Reserved ==========--
+--
+-- Purpose: Chat command hook
+--
+--============================================================================--
+
 local ChatCmds = LambdaMod.GetVar( "ChatCmds" ):GetTable()
 local ChatCmdAliases = LambdaMod.GetVar( "ChatCmdAliases" ):GetTable()
 local Prefix = LambdaMod.GetVar( "Prefix" ):GetString()
@@ -21,13 +27,6 @@ hook.add( "Host_Say", "LambdaModHandleCommand", function( pPlayer, msg, teamonly
     end
 
 	-- TODO: think of a more secure way of do this since we do not have steam id's
-    local name = pPlayer:GetPlayerName()
-    if !tobool( LambdaMod.AdminCFG[ name ].admin ) then
-        LambdaMod.LogAction( "%s tried to use an admin command but isn't an admin", name  )
-        UTIL.ClientPrint(pPlayer, 3, "[LambdaAdmin]: You don't have permission to use this command")
-        return false
-    end
-    
     local parts = {}
     for word in msg:sub( #Prefix + 1 ):gmatch( "%S+" ) do
         table.insert( parts, word )
@@ -41,24 +40,36 @@ hook.add( "Host_Say", "LambdaModHandleCommand", function( pPlayer, msg, teamonly
 	end
 
     local cmd = ChatCmds[ cmdName ]
+    
+    LambdaHook.Call( "OnChatCommand", pPlayer, cmdName, parts )
 
     if cmd then
+        local name = pPlayer:GetPlayerName()
+        LambdaMod.LogAction( "%s ran command %s", name, cmdName  )
+        if ( cmd.admin && !tobool( LambdaMod.AdminCFG[ name ].admin ) ) then
+            LambdaMod.LogAction( "%s tried to use an admin command but isn't an admin", name )
+            UTIL.ClientPrint(pPlayer, 3, "[LambdaAdmin]: You don't have permission to use this command")
+            return ""
+        end
+    
         local ok, result = pcall( cmd.run, pPlayer, parts )
         
         if ( !ok ) then
             LambdaMod.CPrintf( 3, "Error! Failed to run '%s' : %s\n", tostring( cmdName ), tostring( result ))
-            return
+            return ""
         end
         
         if result then
             LambdaMod.LogAction( "[LambdaAdmin]: %s", tostring( result ))
             if #result > 255 then
-            	UTIL.ClientPrint(pPlayer, 3, "[LambdaAdmin]: Please open console")
+            	UTIL.ClientPrint( pPlayer, 3, "[LambdaAdmin]: Please open console")
+                return ""
             else
-            	UTIL.ClientPrint(pPlayer, 3, fmt("[LambdaAdmin] %s", tostring( result ) ))
+            	UTIL.ClientPrint( pPlayer, 3, fmt("[LambdaAdmin] %s", tostring( result ) ))
+                return ""
             end
         end
     else
-        UTIL.ClientPrint(pPlayer, 3, fmt("[LambdaAdmin] Unknown command: %s", tostring( cmdName ) ))
+        UTIL.ClientPrint( pPlayer, 3, fmt("[LambdaAdmin] Unknown command: %s", tostring( cmdName ) ) )
     end
 end )

@@ -1,3 +1,9 @@
+--============== Copyright (C) 2026 AxelBadDev, All Rights Reserved ==========--
+--
+-- Purpose: Configuration loader for LambdaMod
+--
+--============================================================================--
+
 local tempPath = "config/lambdamod"
 
 filesystem.CreateDirHierarchy( tempPath, "MOD" )

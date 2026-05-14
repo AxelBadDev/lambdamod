@@ -1,4 +1,8 @@
--- a statically typed + constant for lua 5.1
+--============== Copyright (C) 2026 AxelBadDev, All Rights Reserved ==========--
+--
+-- Purpose: 
+--
+--============================================================================--
 
 LambdaMod.Vars = {}
 

@@ -1,3 +1,9 @@
+--============== Copyright (C) 2026 AxelBadDev, All Rights Reserved ==========--
+--
+-- Purpose: Console print wrapper
+--
+--============================================================================--
+
 local ConsoleColor = LambdaMod.ConsoleColor
 
 function LambdaMod.LogAction(...)
@@ -17,14 +23,25 @@ function LambdaMod.CPrint(pMode, ...)
         text = table.concat(args, " ")
     end
 
-	if ( pMode == ConsoleColor.CONSOLE_DEFAULT ) then  dbg.ConMsg( tostring( text ) .. "\n" )
-	elseif ( pMode == ConsoleColor.CONSOLE_CYAN ) then dbg.ConColorMsg(LambdaMod.COLOR.CYAN, tostring( text ) .. "\n")
-	elseif ( pMode == ConsoleColor.CONSOLE_WARNING ) then dbg.ConColorMsg(LambdaMod.COLOR.WARNING, tostring( text ) .. "\n")
-	elseif ( pMode == ConsoleColor.CONSOLE_ERROR ) then dbg.ConColorMsg(LambdaMod.COLOR.RED, tostring( text ) .. "\n")
-	elseif ( pMode == ConsoleColor.CONSOLE_LUAPLUS ) then dbg.ConColorMsg(LambdaMod.COLOR.LUAPLUS, tostring( text ) .. "\n")
-	elseif ( pMode == ConsoleColor.CONSOLE_GREEN ) then dbg.ConColorMsg(LambdaMod.COLOR.GREEN, tostring( text ) .. "\n")
-	elseif ( pMode == ConsoleColor.CONSOLE_BLUE ) then dbg.ConColorMsg(LambdaMod.COLOR.BLUE, tostring( text ) .. "\n" )	
-    else dbg.Warning( string.format( "UNDEFINED COLOR TABLE (%s)\n", tostring( pMode ) )) return       
+	if ( pMode == ConsoleColor.CONSOLE_DEFAULT ) then  
+        dbg.ConMsg( tostring( text ) .. "\n" )
+	elseif ( pMode == ConsoleColor.CONSOLE_CYAN ) then 
+        dbg.ConColorMsg(LambdaMod.COLOR.CYAN, tostring( text ) .. "\n")
+	elseif ( pMode == ConsoleColor.CONSOLE_WARNING ) then 
+        dbg.ConColorMsg(LambdaMod.COLOR.WARNING, tostring( text ) .. "\n")
+	elseif ( pMode == ConsoleColor.CONSOLE_ERROR ) then 
+        dbg.ConColorMsg(LambdaMod.COLOR.RED, tostring( text ) .. "\n")
+	elseif ( pMode == ConsoleColor.CONSOLE_LUAPLUS ) then 
+        dbg.ConColorMsg(LambdaMod.COLOR.LUAPLUS, tostring( text ) .. "\n")
+	elseif ( pMode == ConsoleColor.CONSOLE_GREEN ) then 
+        dbg.ConColorMsg(LambdaMod.COLOR.GREEN, tostring( text ) .. "\n")
+	elseif ( pMode == ConsoleColor.CONSOLE_BLUE ) then 
+        dbg.ConColorMsg(LambdaMod.COLOR.BLUE, tostring( text ) .. "\n" )	
+    elseif ( pMode == ConsoleColor.CONSOLE_ORANGE ) then 
+        dbg.ConColorMsg(LambdaMod.COLOR.ORANGE, tostring( text ) .. "\n" )	    
+    else 
+        dbg.Warning( string.format( "UNDEFINED COLOR TABLE (%s)\n", tostring( pMode ) )) 
+        return       
 	end
 end
 
@@ -34,15 +51,28 @@ end
 function LambdaMod.CPrintf(pMode, ...)
 
 	pMode = pMode or 0
+    
+    local text = string.format( ... )
 
-	if ( pMode == ConsoleColor.CONSOLE_DEFAULT ) then dbg.ConMsg( string.format( ... ) )
-	elseif ( pMode == ConsoleColor.CONSOLE_CYAN ) then dbg.ConColorMsg(LambdaMod.COLOR.CYAN, string.format(...))
-	elseif ( pMode == ConsoleColor.CONSOLE_WARNING ) then dbg.ConColorMsg(LambdaMod.COLOR.WARNING, string.format(...) )
-	elseif ( pMode == ConsoleColor.CONSOLE_ERROR ) then dbg.ConColorMsg(LambdaMod.COLOR.RED, string.format(...) )
-	elseif ( pMode == ConsoleColor.CONSOLE_LUAPLUS ) then dbg.ConColorMsg(LambdaMod.COLOR.LUAPLUS, string.format(...))
-	elseif ( pMode == ConsoleColor.CONSOLE_GREEN ) then dbg.ConColorMsg(LambdaMod.COLOR.GREEN, string.format(...))
-	elseif ( pMode == ConsoleColor.CONSOLE_BLUE ) then dbg.ConColorMsg(LambdaMod.COLOR.BLUE, string.format(...))
-    else dbg.Warning( string.format( "UNDEFINED COLOR TABLE (%s)\n", tostring( pMode ) )) return   
+	if ( pMode == ConsoleColor.CONSOLE_DEFAULT ) then 
+        dbg.ConMsg( text )
+	elseif ( pMode == ConsoleColor.CONSOLE_CYAN ) then 
+        dbg.ConColorMsg( LambdaMod.COLOR.CYAN, text )
+	elseif ( pMode == ConsoleColor.CONSOLE_WARNING ) then 
+        dbg.ConColorMsg( LambdaMod.COLOR.WARNING, text  )
+	elseif ( pMode == ConsoleColor.CONSOLE_ERROR ) then 
+        dbg.ConColorMsg( LambdaMod.COLOR.RED, text )
+	elseif ( pMode == ConsoleColor.CONSOLE_LUAPLUS ) then 
+        dbg.ConColorMsg( LambdaMod.COLOR.LUAPLUS, text )
+	elseif ( pMode == ConsoleColor.CONSOLE_GREEN ) then 
+        dbg.ConColorMsg( LambdaMod.COLOR.GREEN, text )
+	elseif ( pMode == ConsoleColor.CONSOLE_BLUE ) then 
+        dbg.ConColorMsg( LambdaMod.COLOR.BLUE, text )
+    elseif ( pMode == ConsoleColor.CONSOLE_ORANGE ) then 
+        dbg.ConColorMsg( LambdaMod.COLOR.ORANGE, text )    
+    else 
+        dbg.Warning( string.format( "UNDEFINED COLOR TABLE (%s)\n", tostring( pMode ) )) 
+        return   
 	end
 end
 

@@ -1,7 +1,8 @@
---[[ 
-   * Copyright (C) 2026 hedv948-source, All Rights Reserved
-   * Purpose: 
---]]
+--============== Copyright (C) 2026 AxelBadDev, All Rights Reserved ==========--
+--
+-- Purpose: 
+--
+--============================================================================--]
 
 PLUGIN.myinfo = 
 {
@@ -12,6 +13,9 @@ PLUGIN.myinfo =
 	api = LAMBDAMOD_API_VERSION,
 	url = "https://github.com/hedv948-source"
 }
+PLUGIN:Include( "LambdaMod" )
+PLUGIN:Include( "ChatCmd" )
+PLUGIN:Include( "Hook" )
 
 includeC( "basecommands/kick.lua" )
 
@@ -29,7 +33,7 @@ function PLUGIN:OnPluginStart()
 		self.PerformKick( ply, arg )
 	end, "")
     
-    ChatCmd.AddCommand( "kick", function( pPlayer, pArgs ) 
+    self.ChatCmd:AddAdminCmd( "kick", function( pPlayer, pArgs ) 
         local targetArg = pArgs[ 1 ]
         if not targetArg then return "Usage: " .. LambdaMod.GetVar( "Prefix" ):GetString() .. "kick <player|me|all|others|index>" end
         

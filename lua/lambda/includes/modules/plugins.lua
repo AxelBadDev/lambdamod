@@ -1,15 +1,40 @@
-LambdaMod.__REG_PLUGINS = {}
-LambdaMod.__REG_LIBRARIES = {}
-LambdaMod.__REG_LIBRARIES_PATH = {}
---PLUGIN.myinfo = 
---{
---	name = "Example",
---	author = "hedv948-source",
---	description = "Example",
---	version = LambdaMod.INFO._VERSION,
---	api = LambdaMod.Loader.api.version,
---	url = "https://github.com/hedv948-source"
---}
+--============== Copyright (C) 2026 AxelBadDev, All Rights Reserved ==========--
+--
+-- Purpose: Plugin/library registeration
+--
+--============================================================================--
+
+LambdaMod.__plugins = {}
+LambdaMod.__libraries = {}
+
+local PLUGIN_ID = 0
+
+local function PrintTable(t, bOrdered, i)
+  i = i or 0
+  local indent = ""
+  for j = 1, i do
+    indent = indent .. "\t"
+  end
+  if not bOrdered then
+    for k, v in pairs(t) do
+      if type(v) == "table" then
+        dbg.ConMsg( indent .. k .. "\n" )
+        PrintTable(v, false, i + 1)
+      else
+        dbg.ConMsg( indent .. k .. "   " .. tostring( v ) .. "\n" )
+      end
+    end
+  else
+    for j, pair in ipairs(t) do
+      if type(pair.value) == "table" then
+        dbg.ConMsg( indent .. pair.key .. "\n" )
+        PrintTable( pair.value, true, i + 1)
+      else
+        dbg.ConMsg( indent .. pair.key .. "   " ..  tostring( pair.value ) .. "\n" )
+      end
+    end
+  end
+end
 
 local function Normalize( base )
     --local _, _, name = string.find( base, "([%w_]*).lua" )
@@ -21,70 +46,105 @@ local function Normalize( base )
     return name
 end
 
-function LambdaMod.RegPlugin( path, pluginData )
-    if ( !LambdaMod.__REG_PLUGINS[ path ] ) then
-        LambdaMod.__REG_PLUGINS[ path ] = pluginData
-    else
-        table.merge( LambdaMod.__REG_PLUGINS[ path ], pluginData )   
-        pluginData = LambdaMod.__REG_PLUGINS[ path ]
-    end
+--- Register a plugin called by loader
+---@param pluginData table
+function LambdaMod.RegPlugin( pluginData )
+    local name = pluginData.myinfo.name
+    local path = pluginData.path
+    if ( !LambdaMod.__plugins[ name ] ) then
+        PLUGIN_ID = PLUGIN_ID + 1
+        pluginData.m_Id = PLUGIN_ID
+        LambdaMod.__plugins[ name ] = pluginData
+    else    
+        table.merge( LambdaMod.__plugins[ name ], pluginData )
+        pluginData = LambdaMod.__plugins[ name ] 
+    end    
 end         
 
+--- Register a library called by loader
+---@param pluginData table
 function LambdaMod.RegLibrary( pluginData )
-    local temp = table.copy( pluginData )
+    local temp = pluginData 
     local name = temp.name
     name = Normalize( name )
-    LambdaMod.__REG_LIBRARIES[ name ] = temp
-end         
-    
+    LambdaMod.__libraries[ name ] = temp
+end 
+
+--- Gets library name from path
+---@param path string
+function LambdaMod.LibraryNameFromPath( path )
+    for k, v in pairs( LambdaMod.__libraries ) do
+        if ( v.path == path ) then
+            return k
+         end
+    end
+    return nil
+end            
+
+--- Gets plugin name from path
+---@param path string
+function LambdaMod.PluginNameFromPath( path )
+    for k, v in pairs( LambdaMod.__plugins ) do
+        if ( v.path == path ) then
+            return k
+         end
+    end
+    return nil
+end            
+ 
+--- Is plugin registered
+---@param path string
+---@return boolean
 function LambdaMod.isRegistered( path )
-    if ( !LambdaMod.__REG_PLUGINS[ path ] ) then return false end
+    if ( !LambdaMod.__plugins[ path ] ) then return false end
     return true
 end      
-
-function LambdaMod.GetClass( pName ) 
-    if ( !LambdaMod.__REG_LIBRARIES[ pName ] ) then return end
-    return LambdaMod.__REG_LIBRARIES[ pName ]
-end    
     
+function LambdaMod.PrintDetailedPlugin() 
+    PrintTable( LambdaMod.__plugins )
+end
+
 LambdaMod.AddCommand( "plugins", function( ply, args )
     
-  if !args[2] then 
-	LambdaMod.CPrintf(0, "Usage: lambda plugins <version|refresh|list|detail>\n")
+  if( !args[ 1 ] || args[ 1 ] == "" ) then 
+	LambdaMod.CPrintf(0, "Usage: lambda plugins <commands> [arguments]\n" )
+    LambdaMod.CPrintf(0, "    lambda plugins list        - Lists all plugins\n" )
+    LambdaMod.CPrintf(0, "    lambda plugins status      - Gets status for plugin\n" )
+    return
   end
   
-  if ( args[2] == "list" ) then
-    if ( !LambdaMod.__REG_PLUGINS && #LambdaMod.__REG_PLUGINS == 0 ) then 
+  if ( args[ 1 ] == "list" ) then
+    if ( !LambdaMod.__plugins && #LambdaMod.__plugins == 0 ) then 
         LambdaMod.CPrintf( 3, "Error! No plugin loaded\n" )
         return
     end   
-    LambdaMod.CPrintf(0, "%-40s %-35s %-30s %-25s\n", "Name", "Version", "Author", "Status")
+    LambdaMod.CPrintf( 0, "%-2s %-15s %-25s %-26s %-27s\n", "-Id-", "Name", "Version", "Author", "Status")
     
-    for k, v in pairs( LambdaMod.__REG_PLUGINS ) do
-        local status
-        if ( v.__LOAD_STATUS == LAMBDAMOD_PLUGIN_RUNNING ) then status = "RUN" 
-        elseif ( v.__LOAD_STATUS == LAMBDAMOD_PLUGIN_BADLOAD ) then status = "BAD"
-        elseif ( v.__LOAD_STATUS == LAMBDAMOD_PLUGIN_ERROR ) then status = "ERROR"
-        elseif ( v.__LOAD_STATUS == LAMBDAMOD_PLUGIN_FAILED ) then status = "FAIL" 
-        end             
-	    LambdaMod.CPrintf(0, "%-40s %-35s %-30s %-25s\n", v.name, v.version, v.author, tostring( status ))
+    for name, data in pairs( LambdaMod.__plugins ) do
+        local status = LambdaMod.Enum.statePluginName[ data:GetState() ]
+	    LambdaMod.CPrintf( 0, "[%02d] %-15s %-25s %-26s %-27s\n", data.m_Id, tostring( name ), data.myinfo.version, data.myinfo.author, tostring( status ) )
 	end
-  elseif ( args[2] == "detail" ) then
-      if ( !LambdaMod.__REG_PLUGINS && #LambdaMod.__REG_PLUGINS == 0 ) then 
+  elseif ( args[ 1 ] == "status" ) then
+      if ( !LambdaMod.__plugins && #LambdaMod.__plugins == 0 ) then 
           LambdaMod.CPrintf( 3, "Error! No plugin loaded\n" )
           return
       end   
       
       LambdaMod.CPrintf(0, "%-40s %-25s\n", "Path", "Status")
-    
-      for k, v in pairs( LambdaMod.__REG_PLUGINS ) do
-          local status
-          if ( v.__LOAD_STATUS == LAMBDAMOD_PLUGIN_RUNNING ) then status = "RUN" 
-          elseif  ( v.__LOAD_STATUS == LAMBDAMOD_PLUGIN_BADLOAD ) then status = "BAD"
-          elseif  ( v.__LOAD_STATUS == LAMBDAMOD_PLUGIN_ERROR ) then status = "ERROR"
-          elseif ( v.__LOAD_STATUS == LAMBDAMOD_PLUGIN_FAILED ) then status = "FAIL" 
-          end             
-	      LambdaMod.CPrintf(0, "%-40s %-25s\n", tostring( k ), tostring( status ))
-	  end
+      
+      if ( args[ 2 ] ) then
+          local pluginData = LambdaMod.__plugins[ args[ 2 ] ]
+          if ( pluginData ) then
+             local status = LambdaMod.Enum.statePluginName[ pluginData:GetState() ]
+             LambdaMod.CPrintf(0, "%-40s %-25s\n", tostring( pluginData.path ), tostring( status ))  
+          else
+              LambdaMod.CPrintf( 3, "Unknown plugin: %s\n", args[ 2 ] )  
+          end
+      else  
+          for name, data in pairs( LambdaMod.__plugins ) do
+            local status = LambdaMod.Enum.statePluginName[ data:GetState() ]
+            LambdaMod.CPrintf(0, "%-40s %-25s\n", tostring( data.path ), tostring( status ))
+          end
+      end    
   end
-end, "", "<version|refresh|list|detail>" )    
+end, "Plugin control command", "" )    

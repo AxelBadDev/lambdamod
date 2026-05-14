@@ -1,7 +1,8 @@
---[[ 
-   * Copyright (C) 2026 hedv948-source, All Rights Reserved
-   * Purpose: VScript implemention
---]]
+--============== Copyright (C) 2026 AxelBadDev, All Rights Reserved ==========--
+--
+-- Purpose: 
+--
+--============================================================================--
 
 LambdaMod.vscript = {}
 LambdaMod.vscript.util = {}

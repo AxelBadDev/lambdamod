@@ -1,3 +1,9 @@
+--============== Copyright (C) 2026 AxelBadDev, All Rights Reserved ==========--
+--
+-- Purpose: 
+--
+--============================================================================--
+
 LIBRARY:RegLibrary( {
     name = "LambdaMod",
     author = "hedv948-source",
@@ -36,6 +42,22 @@ end
 function LIBRARY:ParseTargets( pArgs, pCaller )
     return LambdaMod.LibAdmin.ParseTargets( pArgs, pCaller )  
 end
+
+function LIBRARY:ConColorMsg( color, text )
+    dbg.ConColorMsg( color, text )
+end    
+
+function LIBRARY:PrintCenterHint( pPlayer, text )
+    net.Start( "LambdaModCenterHintText" )
+        net.WriteString( tostring( text ) )
+    net.Send( pPlayer )
+end  
+
+function LIBRARY:PrintCenterHintAll( text )
+    net.Start( "LambdaModCenterHintText" )
+        net.WriteString( tostring( text ) )
+    net.Broadcast()
+end              
 
 function LIBRARY:LogAction(...)
     local text

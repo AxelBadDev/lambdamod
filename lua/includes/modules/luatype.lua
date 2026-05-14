@@ -1,5 +1,8 @@
--- no
-
+--============== Copyright (C) 2026 AxelBadDev, All Rights Reserved ==========--
+--
+-- Purpose: 
+--
+--============================================================================--
 module( "luatype", package.seeall )
 
 local tBaseType = 

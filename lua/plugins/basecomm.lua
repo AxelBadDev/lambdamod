@@ -1,9 +1,9 @@
---[[ 
-   *
-   * Copyright (C) 2026 hedv948-source, All Rights Reserved
-   * Purpose: 
-   *
---]]
+--============== Copyright (C) 2026 AxelBadDev, All Rights Reserved ==========--
+--
+-- Purpose: 
+--
+--============================================================================--
+
 PLUGIN.myinfo = 
 {
 	name = "Basic Comm Controls",

@@ -1,10 +1,11 @@
---[[ 
-   * Copyright (C) 2026 hedv948-source, All Rights Reserved
-   * Purpose: Initialize LambdaMod
---]]
---if CLIENT or _CLIENT then return end -- Make sure its server-side only
-
+--============== Copyright (C) 2026 AxelBadDev, All Rights Reserved ==========--
+--
+-- Purpose: 
+--
+--============================================================================--
 if( CLIENT ) then return end
+
+local easyfs = require( "easyfs" )
 
 LambdaMod = LambdaMod or {}
 
@@ -13,6 +14,9 @@ include "lambda/core/enum.lua"
 include "lambda/core/print.lua"
 include "lambda/core/config.lua"
 include "lambda/core/core.lua"
+include "lambda/core/concmd_split.lua"
+include "lambda/core/net.lua"
+include "lambda/code/info.lua"
 
 ---@class Settings
 ---@field Console_Prefix
@@ -24,21 +28,6 @@ function LambdaMod.IsTableExists( pName )
     if( !LambdaMod[ pName ] ) then return false end
     return true
 end  
-
-LambdaMod["INFO"] = 
-{
-	_VERSION     = LambdaMod["VERSION"] or "fallback-alpha",  --"1.5",
-	_BRANCH      = LambdaMod["BRANCH"] or "Unknown",
-	_DEVELOPMENT = LambdaMod["DEVELOPMENT"] or true,
-	_BUILD       = LambdaMod["BUILD"] or "0",
-
-	_BUILD_DATE  = string.format( 
-                        "%s %s %s",	
-                        tostring(( LambdaMod["BUILD_DATA"].month or "Jan" )), 
-                        tostring(( LambdaMod["BUILD_DATA"].day or "1" )), 
-                        tostring(( LambdaMod["BUILD_DATA"].year or "1970" )) 
-                   )
-}
 
 function LambdaMod.SanitizeCommandName(name)
     name = string.lower(name or "plugin")
@@ -56,7 +45,7 @@ local function includelib( pFile )
 	includeCore( "includes/" .. pFile  )
 end
 
-local function includeFolder( path )
+function LambdaMod.IncludeFolder( path )
     local state
     if(SERVER) then
         state = "Server"
@@ -67,7 +56,7 @@ local function includeFolder( path )
     local fullPath = "lua/" .. path .. "/"
     local fullPath_2 = path .. "/"
     
-    local files = file.Find( fullPath .. "*.lua", "MOD" )
+    local files = easyfs.Find( fullPath .. "*.lua", "MOD" )
     
     if( !files && #files == 0 ) then
         dbg.Warning( "No files found in '"..fullPath.."'\n" )
@@ -75,23 +64,19 @@ local function includeFolder( path )
      end 
        
     for _, v in ipairs( files ) do
-        LambdaMod.Printfc( 4, "%s ", state )
-        LambdaMod.Printfc( 5, "[LambdaMod]: " )
-        LambdaMod.Printfc( 0, "included %s.\n", ( fullPath_2 .. v ) )
+        LambdaMod.CPrintf( 4, "[LM] %s ", state )
+        LambdaMod.CPrintf( 0, "included %s.\n", ( fullPath_2 .. v ) )
         include(  fullPath_2 ..  v )
     end
 end        
 
---include( "lambda/core/defines.lua" )
---include( "lambda/core/shared.lua" )
+LambdaMod.CPrintf( 2, "LambdaMod has started! (%s)\n", LambdaMod["VERSION"] )
 
-
-
-includeFolder( "lambda/includes/modules")
-includeFolder( "lambda/includes/extensions" )
-includeFolder( "lambda/chatbase" )
-includeFolder( "lambda/meta" )
-includeFolder( "lambda" )
+LambdaMod.IncludeFolder( "lambda/includes/modules")
+LambdaMod.IncludeFolder( "lambda/includes/extensions" )
+LambdaMod.IncludeFolder( "lambda/chatbase" )
+LambdaMod.IncludeFolder( "lambda/meta" )
+LambdaMod.IncludeFolder( "lambda" )
 
 hook.add( "InitHUD", "LambdaWelcomeMessage", function(pPlayer)
 	UTIL.ClientPrint(pPlayer, 3, string.format( "This server is using LambdaMod v%s", tostring( LambdaMod["VERSION"] )))
@@ -115,7 +100,7 @@ local RegServerCmd = LambdaMod.cvar.RegServerCmd
 RegAdminCmd( "lambda_cvar", function( ply, cmd, arg ) 
   local tCmd = split( arg )
   if ( !tCmd[1] )then
-    LambdaMod.printfc(0, "Usage: lambda_cvar <cvar> <value>\n")
+    LambdaMod.printfc(0, "[LM] Usage: lambda_cvar <cvar> <value>\n")
     return
   end
   --engine.ServerCommand( tCmd[1] .. " " .. tostring(tCmd[2]) .. "\n" )
@@ -126,7 +111,7 @@ end, "Change ConVar value" )
 
 LambdaMod.AddCommand( "admins", function( ply, args )
 	if ( !LambdaMod.AdminCFG ) then 
-		LambdaMod.printfc(0, "Sorry, but currently admin table isn't available right now.\n")
+		LambdaMod.printfc(0, "[LM] Sorry, but currently admin table isn't available right now.\n")
 		return 
 	end
 	
@@ -136,24 +121,22 @@ LambdaMod.AddCommand( "admins", function( ply, args )
 end )
 
 RegServerCmd( "lambda", function( ply, cmd, arg )
-	local tCmd = split( arg )
-	
-	--local parts = {}
-    --for word in tCmd:gmatch( "%S+" ) do
-        --table.insert( parts, word )
+    
+	local args = _CONSPLIT.Q_cmdsplit( arg )
+    
+    --for word in arg:gmatch( "%S+" ) do
+        --table.insert( tCmd, word )
     --end
     
-    --local cmdName = string.lower( parts[ 1 ] or "" )
-    
-	if !tCmd[1] then
-		LambdaMod.printfc(0, "Usage:\n")
+	if !args[ 1 ] then
+		LambdaMod.printfc(0, "[LM] Usage: lambda <command> [arguments]\n")
 		for k, v in pairs( LambdaMod.Registered ) do
-			LambdaMod.printfc(0, "lambda %s %s\n", tostring( k ), tostring( ( v.helpArg or "" ) ) )
+			LambdaMod.printfc(0, "    lambda %s - %-s\n", tostring( k ), tostring( ( v.help or "" ) ) )
 		end
 		return
 	end
     --if GetConVar("developer"):GetBool() then LambdaMod:printfc(1, "CMD: %s, Args: %s\n", tostring( tCmd[1] ), tostring( tCmd[2]) ) end
-	LambdaMod.RunCommand( ply, tCmd )
+	LambdaMod.RunCommand( ply, args )
 	--table.remove( 
 	
 end, "" )  

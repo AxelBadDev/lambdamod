@@ -1,12 +1,14 @@
---[[ 
-   * Copyright (C) 2026 hedv948-source, All Rights Reserved
-   * Purpose: Extentable Library
---]]
+--============== Copyright (C) 2026 AxelBadDev, All Rights Reserved ==========--
+--
+-- Purpose: 
+--
+--============================================================================--
 
 LambdaMod.libExtend = {}
 
 local libExtend = LambdaMod.libExtend
 
+---@deprecated
 function libExtend.Extend( pLib, pName, pFn )
 	if ( !pLib ) then
 		LambdaMod.printfc( 3, "Library didn't specify\n" )

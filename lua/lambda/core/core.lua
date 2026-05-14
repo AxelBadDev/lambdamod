@@ -1,9 +1,9 @@
---[[ 
-   * Copyright (C) 2026 hedv948-source, All Rights Reserved
-   * Purpose:
---]]
+--============== Copyright (C) 2026 AxelBadDev, All Rights Reserved ==========--
+--
+-- Purpose: 
+--
+--============================================================================--
 
-LambdaMod.Enum = {}
 LambdaMod.Core = {}
 LambdaMod.Core.util = {}
 LambdaMod.Core.blockedCon = {}
@@ -11,23 +11,6 @@ LambdaMod.Core.blockedCon = {}
 local Core = LambdaMod.Core;
 local util = Core.util;
 local blockedCon = Core.blockedCon;
-local LAMBDAC_ENUM = LambdaMod.Enum
-
-LAMBDAC_ENUM.PluginStatus = {
-    PLUGIN_RUNNING = 0,
-    PLUGIN_ERROR = 1,
-    PLUGIN_LOADED = 3,
-    PLUGIN_FAILED = 4,
-    PLUGIN_BADLOAD = 6
-}
-
-LAMBDAC_ENUM.PluginAPI = {
-    API_VERSION = "10"
-}
-
-LambdaMod.ExposeToGlobal( LAMBDAC_ENUM.PluginAPI )  
-LambdaMod.ExposeToGlobal( LAMBDAC_ENUM.PluginStatus )
-
 
 ---Add blacklist console command
 ---@param pName string

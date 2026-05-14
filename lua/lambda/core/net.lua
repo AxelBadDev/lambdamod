@@ -1,12 +1,8 @@
 --============== Copyright (C) 2026 AxelBadDev, All Rights Reserved ==========--
 --
--- Purpose: 
+-- Purpose: Client-Server communication
 --
 --============================================================================--
-
---TODO: Remove this
- 
-    
-    
-    
-    
+if ( SERVER ) then
+    UTIL.AddNetworkString( "DrawHintMsg" )
+end        

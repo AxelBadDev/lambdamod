@@ -1,3 +1,9 @@
+--============== Copyright (C) 2026 AxelBadDev, All Rights Reserved ==========--
+--
+-- Purpose: 
+--
+--============================================================================--
+
 local RegConsoleCmd = LambdaMod.cvar.RegConsoleCmd
 local RegAdminCmd = LambdaMod.cvar.RegAdminCmd
 local LogAction = LambdaMod.LogAction
