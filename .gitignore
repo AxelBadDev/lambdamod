@@ -1,5 +1,3 @@
-lua/autloader.lua
-lua/playercommands.lua
 lua/autorun/gmed4sbpp.lua
 
 lua/gmed4sbpp/*.lua
