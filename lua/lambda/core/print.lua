@@ -76,6 +76,17 @@ function LambdaMod.CPrintf(pMode, ...)
 	end
 end
 
+--- Prints error text
+---@vararg any
+function LambdaMod.Error(...)
+    local text = ""
+    local args = {...}
+    if #args > 0 then
+        text = text .. table.concat(args, " ")
+    end
+    dbg.ConColorMsg( LambdaMod[ "COLOR" ].RED, tostring( text ) .. "\n" )
+end  
+
 ---Prints cyan text
 ---@vararg any
 function LambdaMod.SCprint(...)
