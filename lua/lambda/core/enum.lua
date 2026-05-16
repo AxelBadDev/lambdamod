@@ -8,9 +8,9 @@
 LambdaMod.Enum = {}
 local Enum = LambdaMod.Enum
 
-LambdaMod["VERSION"] = "3.2.0"
+LambdaMod["VERSION"] = "3.2.1"
 LambdaMod["BRANCH"] = "main"
-LambdaMod["BUILD"] = "0310"
+LambdaMod["BUILD"] = "0312"
 LambdaMod["GAME_VERSION"] = "1.1"
 LambdaMod["DEVELOPMENT"] = true
 
@@ -49,7 +49,7 @@ LambdaMod.ConsoleColor =
 
 LambdaMod["BUILD_DATA"] = 
 {
-	day = "12",
+	day = "16",
 	month = "May",
 	year = "2026"
 }
