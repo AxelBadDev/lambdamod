@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-PLUGIN.myinfo = 
+PLUGIN:myinfo 
 {
 	name = "Basic Chat",
 	author = "AxelBadDev",

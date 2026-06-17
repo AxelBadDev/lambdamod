@@ -8,9 +8,9 @@
 LambdaMod.Enum = {}
 local Enum = LambdaMod.Enum
 
-LambdaMod["VERSION"] = "3.2.1"
-LambdaMod["BRANCH"] = "main"
-LambdaMod["BUILD"] = "0312"
+LambdaMod["VERSION"] = "3.3.0"
+LambdaMod["BRANCH"] = "exp"
+LambdaMod["BUILD"] = "0323"
 LambdaMod["GAME_VERSION"] = "1.1"
 LambdaMod["DEVELOPMENT"] = true
 
@@ -18,6 +18,8 @@ _G["LAMBDAMOD_VERSION"] 	 = LambdaMod.VERSION
 _G["LAMBDAMOD_BRANCH"] 	  = LambdaMod.BRANCH
 _G["LAMBDAMOD_BUILD"] 	   = LambdaMod.BUILD
 _G["LAMBDAMOD_GAME_VERSION"] = LambdaMod.GAME_VERSION
+
+_E["LAMBDAMOD"] = {}
 
 LambdaMod["MONTHS"] = 
 {
@@ -47,10 +49,11 @@ LambdaMod.ConsoleColor =
     CONSOLE_ORANGE = 7
 }
 
+
 LambdaMod["BUILD_DATA"] = 
 {
 	day = "16",
-	month = "May",
+	month = "June",
 	year = "2026"
 }
 
@@ -60,6 +63,7 @@ LambdaMod["BUILD_DATE"]  = string.format(
     tostring(( LambdaMod["BUILD_DATA"].day or "1" )), 
     tostring(( LambdaMod["BUILD_DATA"].year or "1970" )) 
 )
+
 ---@class COLOR
 LambdaMod["COLOR"] = 
 {
@@ -106,14 +110,24 @@ Enum.statePluginName =
     [ Enum.PluginState.PLUGIN_BADLOAD ] = "BAD"
 }
 
-
-Enum.Latest = 13
-Enum.APIVer = 
-{ 
-    Enum.Latest, 
-    12
+Enum.AdminFlags = 
+{
+    RESERVED = bitty.lshift( 1, 0 ), -- 1 << 0 == 1
+    GENERIC  = bitty.lshift( 1, 1 ), -- 1 << 1 == 2
+    ROOT     = bitty.lshift( 1, 20 ) -- 1 << 20 == 1048576 
 }
 
+Enum.Latest = 22
+Enum.APIVer = 
+{ 
+    Enum.Latest 
+}
+
+for k, v in pairs(Enum) do
+    if _E["LAMBDAMOD"][k] == nil then
+        _E["LAMBDAMOD"][k] = v
+    end    
+end    
 LambdaMod.ToEnumGlobal( "API_VERSION", Enum.Latest )  
 LambdaMod.ToEnumGlobal( nil, Enum.PluginState )
 LambdaMod.ToEnumGlobal( nil, LambdaMod.ConsoleColor )

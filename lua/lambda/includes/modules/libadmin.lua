@@ -109,3 +109,13 @@ function LibAdmin.ParseTargets( arg, caller )
     return results
 end
 
+function LibAdmin.CountPlayerInServer()
+    local count = 0
+    for i = 1, gpGlobals.maxClients() do
+        local pPlayer = UTIL.PlayerByIndex( i ) 
+        if ( pPlayer && pPlayer:IsPlayer() ) then
+            count = count + 1
+        end    
+    end    
+    return count
+end    

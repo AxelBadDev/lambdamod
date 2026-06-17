@@ -4,12 +4,12 @@
 --
 --============================================================================--
 
-PLUGIN.myinfo = 
+PLUGIN:myinfo 
 {
 	name = "Example",
 	author = "AxelBadDev",
 	description = "Example",
-	version = LambdaMod.INFO._VERSION,
+	version = LambdaMod.VERSION,
 	api = LAMBDAMOD_API_VERSION,
 	url = "https://github.com/AxelBadDev/lambdamod"
 }

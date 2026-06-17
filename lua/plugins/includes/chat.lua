@@ -13,10 +13,10 @@ LIBRARY:RegLibrary( {
     url = "https://github.com/AxelBadDev/lambdamod/"
 } )
 
-function LIBRARY:AddCmd( pName, func, desc, aliases )
+function LIBRARY.AddCmd( pName, func, desc, aliases )
     LambdaMod.ChatCmd.AddCommand( pName, func, desc, aliases )
 end    
 
-function LIBRARY:AddAdminCmd( pName, func, desc, aliases )
+function LIBRARY.AddAdminCmd( pName, func, desc, aliases )
     LambdaMod.ChatCmd.AddAdminCommand( pName, func, desc, aliases )
 end    

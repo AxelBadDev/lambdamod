@@ -42,13 +42,9 @@ function LIBRARY:StartVote()
     end
     
     table.sort( votemaps )    
-    
-    net.Start( "sv_lambda_votemap" )
-        net.WriteString( "Change map to " .. table_random( votemaps ) )
-    net.Broadcast()
 end
 
-function LIBRARY:Vote( pPlayer, pBool )
+function LIBRARY.SendVotetoServer( pPlayer, pBool )
     if ( !self.isVoteStarted ) then dbg.Warning( "Voting hasn't started\n" ) return end
     net.Start( "cl_lambda_votemap" )
         net.WriteString( ( pBool and "YES" or "NO" ) )

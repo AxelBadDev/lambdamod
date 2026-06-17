@@ -4,7 +4,7 @@
 --
 --============================================================================--
 
-PLUGIN.myinfo = 
+PLUGIN:myinfo
 {
 	name = "Basic Comm Controls",
 	author = "AxelBadDev",
@@ -13,27 +13,89 @@ PLUGIN.myinfo =
 	api = LAMBDAMOD_API_VERSION,
 	url = "https://github.com/AxelBadDev/lambdamod/"
 }
+PLUGIN:Import "LambdaMod" 
+PLUGIN:Import "ChatCmd" 
+PLUGIN:Import "Hook" 
+
+local GaggedPlayers = {} 
+
+--local GaggedPlayers = PLUGIN.GaggedPlayers
 
 LambdaMod.CreateTable( false, "GaggedPlayers" )
 
 includeC( "basecomm/gag.lua" )
 
-function PLUGIN:OnPluginStart()
-	LambdaMod.cvar.RegAdminCmd( "lambda_gag", function( ply, cmd, arg )
-		if not arg or arg == "" then 
-			LambdaMod.printfc( 0, "Usage: lambda_gag <player|me|others|all>\n" ) 
-			return
-		end
+function PLUGIN:SetupHook() 
+    hook.add( "Host_Say", "LambdaMod::IsPlayerMuted", function( pPlayer, pMsg, bTeamOnly ) 
+        -- local GaggedPlayers = LambdaMod.GetVar( "GaggedPlayers" ):GetTable()
+        if ( self.GaggedPlayers[ pPlayer ] ) then
+            self.LambdaMod.LogAction( "%s tried to chat but is gagged.", pPlayer:GetPlayerName() )
+            return "" -- Don't show a fucking message to everyone
+        end    
+    end)
+end
+
+local function Console_doGAG( ply, cmd, arg )
+    
+    if ( cmd == "lambda_gag" ) then
+        if ( !arg || arg == "" ) then 
+            LambdaMod.printfc( 0, "Usage: lambda_gag <player|me|others|all>\n" ) 
+            return
+        end
 		
-		self.PerformGag( ply, arg )
-	end, "lambda_gag <player|me|others|all> - Removes a player's ability to use chat." )
-	
-	LambdaMod.cvar.RegAdminCmd( "lambda_ungag", function( ply, cmd, arg )
-		if not arg or arg == "" then 
+        local targets = PLUGIN.LambdaMod.ParseTargets( arg, ply ) 
+        
+        for _, t in ipairs( targets ) do
+            GaggedPlayers[ t ] = true
+        end    
+        LambdaMod.CPrintf( 0,"Gagged %d player(s).\n", #targets )
+    end
+    
+    if ( cmd == "lambda_ungag" ) then
+        if ( !arg || arg == "" ) then 
 			LambdaMod.printfc( 0, "Usage: lambda_ungag <player|me|others|all>\n" ) 
 			return
 		end
 		
-		self.PerformUnGag( ply, arg )
-	end, "lambda_ungag <player|me|others|all> - Restores a player's ability to use chat.")
+		local targets = PLUGIN.LambdaMod.ParseTargets( arg, ply ) 
+        
+        for _, t in ipairs( targets ) do
+            GaggedPlayers[ t ] = nil
+        end    
+        LambdaMod.CPrintf( 0,"Ungagged %d player(s).\n", #targets )   
+   end     
+end 
+       
+function PLUGIN:OnPluginStart()
+    self:SetupHook()
+    self.LambdaMod.RegAdminCmd( "lambda_gag", Console_doGAG, "lambda_gag <player|me|others|all> - Removes a player's ability to use chat." )
+    self.LambdaMod.RegAdminCmd( "lambda_ungag", Console_doGAG, "lambda_ungag <player|me|others|all> - Restores a player's ability to use chat.")
+    
+    self.ChatCmd.AddAdminCmd( "gag", function( ply, cmd, args ) 
+        local targetArg = args[ 1 ]
+        if not targetArg or targetArg == "" then 
+			return "Usage: !gag <player|me|others|all>"; 
+		end
+        
+        local targets = self.LambdaMod.ParseTargets( targetArg, ply ) 
+        
+        for _, t in ipairs( targets ) do
+            GaggedPlayers[ t ] = true
+        end    
+        return "Gagged " .. #targets .. " player(s)."
+    end, "Removes a player's ability to use chat.")
+    
+   self.ChatCmd.AddAdminCmd( "ungag", function( ply, cmd, args ) 
+        local targetArg = args[ 1 ]
+        if not targetArg or targetArg == "" then 
+			return "Usage: !ungag <player|me|others|all>"; 
+		end
+        
+        local targets = self.LambdaMod.ParseTargets( targetArg, ply ) 
+        
+        for _, t in ipairs( targets ) do
+            GaggedPlayers[ t ] = nil
+        end    
+        return "Ungagged " .. #targets .. " player(s)."
+    end, "Restores a player's ability to use chat.")    
 end

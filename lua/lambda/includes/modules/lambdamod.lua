@@ -39,38 +39,49 @@ end
 --- Running a non console command
 ---@param pPlayer CBasePlayer
 ---@param pArg string[]
-function LambdaMod.RunCommand( pPlayer, pArg )
+function LambdaMod.RunCommand( pPlayer, pCmd, pArg )
     if ( !LambdaMod.Registered || LambdaMod.Registered == nil ) then return end
     
     --LambdaHook.Call( "OnRunCommand", pPlayer, pArg ) 
 	--if pPlayer   
     --if(!cmd)
     
-    local cmdName = string.lower( pArg[ 1 ] or "" )
-    table.remove( pArg, 1 )
+    local cmdName = string.lower( pCmd or "" )
+    --table.remove( pArg, 1 )
     
 	if ( !cmdName ) then return end
     --if(!LambdaMod.Registered[cmd])
-	if ( !LambdaMod.Registered[ cmdName ] ) then
-         LambdaMod.CPrintf( 3, "Unknown command: \"%s\"\n", tostring( cmdName ) )
+    
+    if ( cmdName == "" ) then
+        LambdaMod.printfc(0, "[LM] Usage: lambda <command> [arguments]\n")
+        for k, v in pairs( LambdaMod.Registered ) do
+            LambdaMod.printfc(0, "    lambda %-12s - %s\n", tostring( k ), tostring( ( v.help or "" ) ) )
+        end
+        
+        return
+    end
+    
+    local cmd = LambdaMod.Registered[ cmdName ]
+	if ( !cmd ) then
+         LambdaMod.CPrintf( 3, "Unknown command: '%s'\n", tostring( cmdName ) )
          return
 	end
 	
-	local ok, err = pcall( LambdaMod.Registered[ cmdName ].func, pPlayer, pArg )
-	if ( !ok ) then
-	  LambdaMod.CPrintf( 3, "Failed to run \"%s\" : %s\n", cmdName, tostring(err) )
+	local ok, err = pcall( cmd.func, pPlayer, cmdName, pArg )
+	if ( !ok && err ) then
+	  LambdaMod.CPrintf( 3, "Failed to run '%s' : %s\n", cmdName, tostring(err) )
       return
 	end
 end
 --LambdaMod.AddCommand( pName, pFn, pHelp, pHelpArg)
 
-LambdaMod.AddCommand( "version", function( ply, args )
+LambdaMod.AddCommand( "version", function( ply, cmd, args )
 	LambdaMod.printfc(0, "LambdaMod version: %s\n", tostring( LambdaMod["VERSION"] ))
 	LambdaMod.printfc(0, "Builded on: %s\n", tostring( LambdaMod["BUILD_DATE"] ))
 	--LambdaMod.printfc(0, "Branch: %s\n", tostring( LambdaMod.INFO._BRANCH ))
 end, "", "" )
 
-LambdaMod.AddCommand( "cmds", function( ply, args )
+LambdaMod.AddCommand( "help", function( ply, cmd, args )
 	LambdaMod.printfc(0, "%-25s      - %-20s\n", "Command(s)", "Description")
 	
     for k, v in pairs(LambdaMod.cvar.Registered) do
@@ -82,12 +93,12 @@ end, "", "" )
 local function println(...)
     local args = {...}
     
-    local text
+    local text = ""
     if #args > 0 then
-        text = table.concat(args, " ")
+        text = text .. table.concat(args, " ")
     end
     
-    dbg.ConMsg( text .. "\n" )
+    dbg.ConMsg( tostring( text ) .. "\n" )
 end   
 
 local function PrintTable(t, bOrdered, i)
@@ -99,34 +110,34 @@ local function PrintTable(t, bOrdered, i)
   if not bOrdered then
     for k, v in pairs(t) do
       if type(v) == "table" then
-        dbg.ConMsg( indent .. k .. "\n" )
+        println( indent, k )
         PrintTable(v, false, i + 1)
       else
-        dbg.ConMsg( indent .. k .. "   " .. v .. "\n" )
+        println( indent .. k, v )
       end
     end
   else
     for j, pair in ipairs(t) do
       if type(pair.value) == "table" then
-        dbg.ConMsg( indent .. pair.key .. "\n" )
+        println( indent .. pair.key )
         PrintTable(pair.value, true, i + 1)
       else
-        dbg.ConMsg( indent .. pair.key .. "   " ..  pair.value)
+        println( indent .. pair.key, pair.value )
       end
     end
   end
 end
 
-LambdaMod.AddCommand( "dump", function( ply, args )
+LambdaMod.AddCommand( "dump", function( ply, cmd, args )
 	PrintTable( LambdaMod )
 end, "Dumps LambdaMod table", "" )
 
-LambdaMod.AddCommand( "credits", function( ply, args )
+LambdaMod.AddCommand( "credits", function( ply, cmd, args )
     local credits = {
         "LambdaMod was developed by:",
-        "   LambdaMod developed by hedv948-source",
-        "   Pluginloader made by YourLocalSunny modified by hedv948-source",
-        "   HL2SB++ made by YourLocalMoon/ThePixelMoon",
+        "   LambdaMod developed by AxelBadDev",
+        "   Pluginloader made by YourLocalSunny modified by AxelBadDev",
+        "   Half-Life 2 Sandbox++ made by YourLocalMoon/ThePixelMoon (Now Aridity Team)",
         "   Inspired by Metamod:Source/SourceMod",
     }
 	LambdaMod.CPrint(0, table.concat( credits, "\n") )

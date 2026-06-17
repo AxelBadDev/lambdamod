@@ -4,21 +4,22 @@
 --
 --============================================================================--
 
-LIBRARY:RegLibrary( {
+LIBRARY:RegLibrary
+{
     name = "Hook",
     author = "AxelBadDev",
     description = "Hook interface",
     version = LAMBDAMOD_VERSION,
     api = LAMBDAMOD_API_VERSION,
     url = "https://github.com/AxelBadDev/lambdamod/"
-} )
+}
 
-function LIBRARY:AddHook( pEventName, pName, func )
-    LambdaHook.Add( pEventName, pName, func )
+function LIBRARY.Add( pEventName, pName, func )
+    LambdaMod.Hook.Add( pEventName, pName, func )
 end
 
-function LIBRARY:CallHook( pEventName, ... )
-    return LambdaHook.Call( pEventName, ... )
+function LIBRARY.CallHook( pEventName, ... )
+    return LambdaMod.Hook.Run( pEventName, ... )
 end    
     
     

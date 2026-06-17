@@ -104,7 +104,7 @@ MetaVars.__newindex = function( self, k, v )
   end  
 end 
 
-function LambdaMod.CreateVar( isConst, pName, dataType, value )
+function LambdaMod.CreateVar( isConst, dataType, pName, value )
     if ( LambdaMod.Vars[ pName ] ) then
         LambdaMod.CPrintf( 3, "Error! " )
         LambdaMod.CPrintf( 0, "'%s' already exists\n", tostring( pName ) )
@@ -148,7 +148,7 @@ end
 
 function LambdaMod.CreateTable( isConst, pName, data )
     data = data or {}
-    return LambdaMod.CreateVar( isConst, pName, "table", data )
+    return LambdaMod.CreateVar( isConst, "Table", pName, data )
 end
     
 

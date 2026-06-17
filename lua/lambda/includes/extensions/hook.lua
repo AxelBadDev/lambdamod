@@ -4,26 +4,29 @@
 --
 --============================================================================--
 
-LambdaHook = LambdaHook or {}
-LambdaHook.tHooks = {}
-local tHooks = LambdaHook.tHooks
+LambdaMod.Hook = {}
+LambdaMod.Hook.tHooks = {}
+LambdaMod.Hook.tReturns = {}
 
-function LambdaHook.Simple( pHookName, pFn )
+local tHooks = LambdaMod.Hook.tHooks
+local tReturns = LambdaMod.Hook.tHooks
+
+function LambdaMod.Hook.Simple( pHookName, pFn )
     tHooks[ pHookName ] = tHooks[ pHookName ] or {}
     tHooks[ pHookName ][ pHookName .. "_" .. tostring(math.random(1000000)) ] = pFn
 end    
 
-function LambdaHook.Add( pHookName, pEventName, pFn )
+function LambdaMod.Hook.Add( pHookName, pEventName, pFn )
     tHooks[ pHookName ] = tHooks[ pHookName ] or {}
     tHooks[ pHookName ][ pEventName ] = pFn
 end    
 
-function LambdaHook.Call( pHookName, ... )
+function LambdaMod.Hook.Run( pHookName, ... )
     local tHooks = tHooks[ pHookName ]
     if tHooks ~= nil then
         for k, v in pairs( tHooks ) do
             if v == nil then
-                dbg.Warning( "LambdaHook: Hook '" .. tostring(k) .. "' (" .. tostring(strEventName) .. ") tried to call a nil function!\n" )
+                dbg.Warning( "LambdaHook: Hook '" .. tostring(k) .. "' (" .. tostring( pHookName ) .. ") tried to call a nil function!\n" )
                 tHooks[k] = nil
                 break
             else
@@ -31,15 +34,13 @@ function LambdaHook.Call( pHookName, ... )
                 if tReturns[1] == false then
                     dbg.Warning(
                         "LambdaHook: Hook '" ..
-                         tostring(k) .. "' (" .. tostring(strEventName) .. ") Failed: " .. tostring(tReturns[2]) .. "\n"
+                         tostring(k) .. "' (" .. tostring(pHookName) .. ") Failed: " .. tostring(tReturns[2]) .. "\n"
                     )
                     tHooks[k] = nil
                 elseif tReturns[2] ~= nil then
-                    return table.unpack(tReturns, 2)
+                    return unpack(tReturns, 2)
                 end
             end
         end
     end
 end
-
-return LambdaHook

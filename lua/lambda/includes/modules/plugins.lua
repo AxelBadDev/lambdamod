@@ -7,6 +7,8 @@
 LambdaMod.__plugins = {}
 LambdaMod.__libraries = {}
 
+includeC "plugin/IPluginObject.lua"
+
 local PLUGIN_ID = 0
 
 local function PrintTable(t, bOrdered, i)
@@ -104,47 +106,46 @@ function LambdaMod.PrintDetailedPlugin()
     PrintTable( LambdaMod.__plugins )
 end
 
-LambdaMod.AddCommand( "plugins", function( ply, args )
+LambdaMod.AddCommand( "plugins", function( ply, cmd, args )
     
-  if( !args[ 1 ] || args[ 1 ] == "" ) then 
-	LambdaMod.CPrintf(0, "Usage: lambda plugins <commands> [arguments]\n" )
-    LambdaMod.CPrintf(0, "    lambda plugins list        - Lists all plugins\n" )
-    LambdaMod.CPrintf(0, "    lambda plugins status      - Gets status for plugin\n" )
-    return
-  end
-  
-  if ( args[ 1 ] == "list" ) then
-    if ( !LambdaMod.__plugins && #LambdaMod.__plugins == 0 ) then 
-        LambdaMod.CPrintf( 3, "Error! No plugin loaded\n" )
+    local cmd = string.lower( args[ 1 ] or "" )
+    
+    if( !cmd || cmd == "" ) then 
+        LambdaMod.CPrintf(0, "Usage: lambda plugins <commands> [arguments]\n" )
+        LambdaMod.CPrintf(0, "    lambda plugins list        - Lists all plugins\n" )
+        LambdaMod.CPrintf(0, "    lambda plugins status      - Gets status for plugin\n" )
         return
-    end   
-    LambdaMod.CPrintf( 0, "%-2s %-15s %-25s %-26s %-27s\n", "-Id-", "Name", "Version", "Author", "Status")
-    
-    for name, data in pairs( LambdaMod.__plugins ) do
-        local status = LambdaMod.Enum.statePluginName[ data:GetState() ]
-	    LambdaMod.CPrintf( 0, "[%02d] %-15s %-25s %-26s %-27s\n", data.m_Id, tostring( name ), data.myinfo.version, data.myinfo.author, tostring( status ) )
-	end
-  elseif ( args[ 1 ] == "status" ) then
-      if ( !LambdaMod.__plugins && #LambdaMod.__plugins == 0 ) then 
-          LambdaMod.CPrintf( 3, "Error! No plugin loaded\n" )
-          return
-      end   
-      
-      LambdaMod.CPrintf(0, "%-40s %-25s\n", "Path", "Status")
-      
-      if ( args[ 2 ] ) then
-          local pluginData = LambdaMod.__plugins[ args[ 2 ] ]
-          if ( pluginData ) then
-             local status = LambdaMod.Enum.statePluginName[ pluginData:GetState() ]
-             LambdaMod.CPrintf(0, "%-40s %-25s\n", tostring( pluginData.path ), tostring( status ))  
-          else
-              LambdaMod.CPrintf( 3, "Unknown plugin: %s\n", args[ 2 ] )  
-          end
-      else  
-          for name, data in pairs( LambdaMod.__plugins ) do
+    end
+  
+    if ( cmd == "list" ) then
+        if ( !LambdaMod.__plugins && #LambdaMod.__plugins == 0 ) then 
+            LambdaMod.CPrintf( 3, "Error! No plugin loaded\n" )
+            return
+        end   
+        LambdaMod.CPrintf( 0, "%-2s %-15s %-25s %-26s %-27s\n", "-Id-", "Name", "Version", "Author", "Status")
+        for name, data in pairs( LambdaMod.__plugins ) do
             local status = LambdaMod.Enum.statePluginName[ data:GetState() ]
-            LambdaMod.CPrintf(0, "%-40s %-25s\n", tostring( data.path ), tostring( status ))
-          end
-      end    
-  end
+            LambdaMod.CPrintf( 0, "[%02d] %-15s %-25s %-26s %-27s\n", data.m_Id, tostring( name ), data.version, data.author, tostring( status ) )
+        end
+    elseif ( cmd == "status" ) then
+        if ( !LambdaMod.__plugins && #LambdaMod.__plugins == 0 ) then 
+            LambdaMod.CPrintf( 3, "Error! No plugin loaded\n" )
+            return
+        end   
+        LambdaMod.CPrintf(0, "%-40s %-25s\n", "Path", "Status")
+        if ( args[ 2 ] ) then
+            local pluginData = LambdaMod.__plugins[ args[ 2 ] ]
+            if ( pluginData ) then
+                local status = LambdaMod.Enum.statePluginName[ pluginData:GetState() ]
+                LambdaMod.CPrintf(0, "%-40s %-25s\n", tostring( pluginData.path ), tostring( status ))  
+            else
+                LambdaMod.CPrintf( 3, "Unknown plugin: %s\n", args[ 2 ] )  
+            end
+        else  
+            for name, data in pairs( LambdaMod.__plugins ) do
+                local status = LambdaMod.Enum.statePluginName[ data:GetState() ]
+                LambdaMod.CPrintf(0, "%-40s %-25s\n", tostring( data.path ), tostring( status ))
+            end
+        end    
+    end
 end, "Plugin control command", "" )    

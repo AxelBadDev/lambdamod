@@ -17,10 +17,10 @@ function LambdaMod.CPrint(pMode, ...)
 
 	pMode = pMode or 0
     
-    local text 
+    local text = ""
     local args = {...}
     if #args > 0 then
-        text = table.concat(args, " ")
+        text = text .. table.concat(args, " ")
     end
 
 	if ( pMode == ConsoleColor.CONSOLE_DEFAULT ) then  
@@ -86,7 +86,7 @@ function LambdaMod.Error(...)
     end
     dbg.ConColorMsg( LambdaMod[ "COLOR" ].RED, tostring( text ) .. "\n" )
 end  
-
+  
 ---Prints cyan text
 ---@vararg any
 function LambdaMod.SCprint(...)

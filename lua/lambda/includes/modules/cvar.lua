@@ -9,6 +9,8 @@ LambdaMod.cvar = {}
 LambdaMod.cvar.Registered = {}
 LambdaMod.cvar.registeredAdmin = {}
 
+local bitequal = require( "bitequal" )
+
 local registered = LambdaMod.cvar.Registered
 local cvar = LambdaMod.cvar
 local registeredAdmin = LambdaMod.cvar.registeredAdmin
@@ -18,9 +20,9 @@ local registeredAdmin = LambdaMod.cvar.registeredAdmin
 ---@param pFn function
 ---@param pHelp? string
 ---@param flags integer
-function cvar.RegConsoleCmd(pName, pFn, pHelp, flags)
+function cvar.RegConsoleCmd( pName, pFn, pHelp, flags )
   if(registered[pName]) then 
-    LambdaMod.CPrintf( 3, "%s Already registered\n", pName)
+    LambdaMod.CPrintf( 3, "[LM] Warning! '%s' already registered\n", pName)
     return
   end
   
@@ -32,6 +34,10 @@ function cvar.RegConsoleCmd(pName, pFn, pHelp, flags)
   
   concommand.Create(pName, pFn, pHelp, flags)
 end
+
+function LambdaMod.RegConsoleCmd( pName, pFn, pHelp, flags ) end
+function LambdaMod.RegAdminCmd( pName, pFn, pHelp, flags ) end
+function LambdaMod.RegServerCmd( pName, pFn, pHelp, flags ) end
 
 local function tobool( val )
 	if ( val == nil || val == false || val == 0 || val == "0" || val == "false" ) then return false end
@@ -45,13 +51,14 @@ end
 ---@param flags integer
 function cvar.RegAdminCmd( pName, pFn, pHelp, flags )
 	if ( registered[ pName ] || registeredAdmin[ pName ] ) then 
-		LambdaMod.CPrintf( 3, "%s Already registered\n", pName )
+		LambdaMod.CPrintf( 3, "[LM] Warning! '%s' already registered\n", pName )
         return
     end
     
     registeredAdmin[ pName ] = 
 	{
     	description = "[ADMIN] " .. tostring( pHelp ),
+        flags = 0,
     	fn = pFn
     }
     cvar.RegConsoleCmd( pName, function( pPlayer, pCmd, pArg )
@@ -79,7 +86,7 @@ end
 ---@param flags integer
 function cvar.RegServerCmd( pName, pFn, pHelp, flags )
 	if registered[ pName ] then 
-		LambdaMod.CPrintf( 3, "%s Already registered\n", pName )
+		LambdaMod.CPrintf( 3, "[LM] Warning! '%s' already registered\n", pName )
         return
 	end
 	
