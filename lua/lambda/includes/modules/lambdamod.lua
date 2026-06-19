@@ -137,7 +137,7 @@ LambdaMod.AddCommand( "credits", function( ply, cmd, args )
         "LambdaMod was developed by:",
         "   LambdaMod developed by AxelBadDev",
         "   Pluginloader made by YourLocalSunny modified by AxelBadDev",
-        "   Half-Life 2 Sandbox++ made by YourLocalMoon/ThePixelMoon (Now Aridity Team)",
+        "   Half-Life 2 Sandbox++ made by YourLocalMoon/ThePixelMoon",
         "   Inspired by Metamod:Source/SourceMod",
     }
 	LambdaMod.CPrint(0, table.concat( credits, "\n") )
