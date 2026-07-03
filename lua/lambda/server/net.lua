@@ -1,12 +1,9 @@
 --============== Copyright (C) 2026 AxelBadDev, All Rights Reserved ==========--
 --
--- Purpose: 
+-- Purpose: Client-Server communication
 --
 --============================================================================--
 
-includeC "IPluginShared.lua"
-includeC "ILibLoader.lua"
-includeC "IPluginLoader.lua"
-
-IPluginManager = IPluginManager or {}
-return IPluginManager
+if ( SERVER ) then
+    --UTIL.AddNetworkString( "lambda_test" )
+end        

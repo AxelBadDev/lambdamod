@@ -14,6 +14,10 @@ local function formattedPath( name )
     return string.format( tostring( tempPath .. "/%s.cfg" ), tostring( name ) )
 end
 
+LambdaMod.ConfigFormattedPath = function( name )
+    return formattedPath( name )
+end   
+
 function LambdaMod.CreateNewConfig( name )
     if ( !name || name == "" ) then return end
     if ( easyfs.Exists( tempPath .. "/" .. name:lower() ) ) then
@@ -52,8 +56,24 @@ function LambdaMod.WriteConfig( name, key, value )
     
     config:SaveToFile( formattedPath( name_lower ) )
     config:deleteThis();
-end                      
-        
+end   
+
+function LambdaMod.LoadConfig( name, path )
+    if ( !name ) then return end
+    local name_lower = name:lower()
+    if ( !easyfs.Exists( formattedPath( name_lower ) ) ) then
+        LambdaMod.CPrintf( 3, "File '%s' doesn't exists.\n", name )
+        return nil
+    end
+    
+    local config = KeyValues( tostring(name) )
+    config:LoadFromFile( formattedPath( name_lower ) )
+    return config 
+end             
+
+function LambdaMod.SaveConfig() end          
+    
+if SERVER then        
 function LambdaMod.WriteAdminLegacyConfig( name, set )
     --assert( type( set ) == "table", "bad argument #1 to 'WriteAdminConfig' (table expected got "..type( set )..")")
     --UTF8 Encoded
@@ -80,7 +100,7 @@ function LambdaMod.LoadAdminConfig()
     LambdaMod.AdminCFG = AdminCFG:ToTable()
 end    
 
-function LambdaMod.LoadConfig()
+function LambdaMod.def_LoadConfig()
     local Config = KeyValues( "LambdaMod" )
     Config:LoadFromFile( string.format( tostring( tempPath .. "/%s.cfg" ), "config" ), "MOD" )
     
@@ -162,5 +182,7 @@ function LambdaMod.GetConfig()
     return LambdaMod.CConfig
 end    
     
-LambdaMod.LoadConfig()    
+LambdaMod.def_LoadConfig()    
 LambdaMod.LoadAdminConfig()   
+
+end

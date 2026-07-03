@@ -8,9 +8,9 @@
 LambdaMod.Enum = {}
 local Enum = LambdaMod.Enum
 
-LambdaMod["VERSION"] = "3.3.0"
+LambdaMod["VERSION"] = "4.0.0"
 LambdaMod["BRANCH"] = "exp"
-LambdaMod["BUILD"] = "0323"
+LambdaMod["BUILD"] = "0400"
 LambdaMod["GAME_VERSION"] = "1.1"
 LambdaMod["DEVELOPMENT"] = true
 
@@ -52,9 +52,9 @@ LambdaMod.ConsoleColor =
 
 LambdaMod["BUILD_DATA"] = 
 {
-	day = "16",
-	month = "June",
-	year = "2026"
+    day = "3",
+    month = "July",
+    year = "2026"
 }
 
 LambdaMod["BUILD_DATE"]  = string.format( 
@@ -84,10 +84,10 @@ Enum["ColorMap"] =
     [ LambdaMod.ConsoleColor.CONS0LE_LUAPLUS ] = LambdaMod["COLOR"]["LUAPLUS"],
     [ LambdaMod.ConsoleColor.CONS0LE_GREEN ]   = LambdaMod["COLOR"]["GREEN"],
     [ LambdaMod.ConsoleColor.CONS0LE_BLUE ]    = LambdaMod["COLOR"]["BLUE"],
-    [ LambdaMod.ConsoleColor.CONS0LE_ORANGE ]  = LambdaMod["COLOR"]["ORANGE"],
+    [ LambdaMod.ConsoleColor.CONS0LE_ORANGE ]  = LambdaMod["COLOR"]["ORANGE"]
 } 
-]]--
-   
+]]
+
 ---@class _COLOR : COLOR
 LambdaMod["_COLOR"] = LambdaMod["COLOR"]
 
@@ -117,7 +117,15 @@ Enum.AdminFlags =
     ROOT     = bitty.lshift( 1, 20 ) -- 1 << 20 == 1048576 
 }
 
-Enum.Latest = 22
+Enum.HUD = {
+    PRINTNOTIFY = 1,
+    PRINTCONSOLE = 2,
+    PRINTTALK = 3,
+    PRINTCENTER = 4
+}
+
+Enum.ConfigPath = "config/lambdamod"
+Enum.Latest = 25
 Enum.APIVer = 
 { 
     Enum.Latest 

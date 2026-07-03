@@ -5,6 +5,8 @@
 --============================================================================--
 
 LambdaMod.Core = {}
+
+if ( SERVER ) then
 LambdaMod.Core.util = {}
 LambdaMod.Core.blockedCon = {}
 
@@ -26,13 +28,16 @@ end
 ---@param cmd string
 ---@return nil
 function Core.ForwardToConsole(cmd)
-  if ( _SERVER || !_CLIENT ) then
-	if ( blockedCon[ cmd ] != nil ) then 
-		LambdaMod.printfc(3, "Core.ForwardToConsole: Command is blocked! (%s)\n", tostring( cmd ))
-		return
-	end
-    engine.ServerCommand(cmd  .. "\n");
-  end
+    if ( blockedCon[ cmd ] != nil ) then 
+        LambdaMod.printfc(3, "Core.ForwardToConsole: Command is blocked! (%s)\n", tostring( cmd ))
+        return
+    end
+    
+    if ( SERVER ) then
+        engine.ServerCommand(cmd  .. "\n")
+    else 
+        engine.ServerCmd( cmd .. "\n" )    
+    end    
 end
 
 ---Prints message to player
@@ -59,4 +64,4 @@ end
 function util.CSay( pMsg )
 	util.CMsgAll( 3, string.format("%s : %s", tostring(LambdaMod.Settings.Console_Prefix), tostring(pMsg) ) );
 end
-
+end

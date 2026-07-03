@@ -24,25 +24,31 @@ local RegAdminCmd = LambdaMod.cvar.RegAdminCmd
 local LibAdmin = LambdaMod.LibAdmin
 local ChatCmd = LambdaMod.ChatCmd
 
+local PrintMessage = LambdaMod.Usermsg.PrintMessage
+local HUD_PRINTCONSOLE = LambdaMod.Enum.HUD.PRINTCONSOLE
+local HUD_PRINTTALK = LambdaMod.Enum.HUD.PRINTTALK
+
+local format = string.format
+
 function PLUGIN:Init()
 end    
 
 local function Console_Kick( pPlayer, pCmd, pArg ) 
-    if not arg or arg == "" then LambdaMod.printfc(0, "Usage: lambda_kick <player|me|others|all>\n") return end
+    if not pArg or pArg == "" then PrintMessage(pPlayer, HUD_PRINTCONSOLE, "[LM] Usage: lambda_kick <player|me|others|all>") return end
         
-    local targets = self.LambdaMod.ParseTargets( arg, pPlayer )
+    local targets = LambdaMod.LibAdmin.ParseTargets( pArg, pPlayer )
         
     for _, t in ipairs( targets ) do
-        engine.ServerCommand("kick" .. t:GetPlayerName() .. "\n")
+        engine.ServerCommand("kick " .. t:GetPlayerName() .. "\n")
     end    
         
-    LambdaMod.CPrintf( 0, "Kicked " .. #targets .. " player(s).\n" )
+    PrintMessage( pPlayer, HUD_PRINTCONSOLE, "Kicked " .. #targets .. " player(s).\n" )
 end
 
 local function Chat_Kick( pPlayer, pArg ) 
     local targetArg = pArgs[ 1 ]
     if not targetArg or targetArg == "" then return "Usage: " .. LambdaMod.GetVar( "Prefix" ):GetString() .. "kick <player|me|all|others|index>" end
-    local targets = self.LambdaMod.ParseTargets( targetArgs, pPlayer )
+    local targets = LambdaMod.LibAdmin.ParseTargets( targetArgs, pPlayer )
     for _, t in ipairs( targets ) do
         engine.ServerCommand("kick" .. t:GetPlayerName() .. "\n")
     end    
@@ -52,8 +58,6 @@ end
 function PLUGIN:OnPluginStart()
     self.LambdaMod.RegAdminCmd( "lambda_kick", Console_Kick, "Kick player(s)")
     
-    self.ChatCmd.AddAdminCmd( "kick", function( pPlayer, pCmd, pArgs ) 
-        
-    end, "Kicks player(s)")
+    self.ChatCmd.AddAdminCmd( "kick", Chat_Kick, "Kicks player(s)")
 end
 

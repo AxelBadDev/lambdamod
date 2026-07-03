@@ -5,62 +5,66 @@
 --============================================================================--
 
 local easyfs = require( "easyfs" )
+
 LambdaMod = LambdaMod or {}
 
-includeC "core/globals.lua"
-includeC "core/enum.lua"
-includeC "core/print.lua"
-includeC "core/config.lua"
-includeC "core/core.lua"
-includeC "core/concmd_split.lua"
-includeC "core/net.lua"
-includeC "core/info.lua"
+include "lambda/shared/bit.lua"
+include "lambda/shared/globals.lua"
+include "lambda/shared/enum.lua"
+include "lambda/shared/print.lua"
+include "lambda/shared/config.lua"
+include "lambda/shared/core.lua"
+include "lambda/shared/concmd_split.lua"
+include "lambda/shared/info.lua"
+include "lambda/shared/folderinc.lua"
+include "lambda/shared/varlib.lua"
+
+include "lambda/shared/usermsg.lua"
+include "lambda/shared/console.lua"
+include "lambda/shared/cvar.lua"
 
 ---@class Settings
 ---@field Console_Prefix
 LambdaMod.Settings = {}
 LambdaMod.Settings.Console_Prefix = "CONSOLE"
 
-function IncludeFolder( path )
-    local state
-    if(SERVER) then
-        state = "Server"
-    elseif (CLIENT) then
-        state = "Client"
-    end
-    
-    local fullPath = "lua/" .. path .. "/"
-    local fullPath_2 = path .. "/"
-    
-    local files = easyfs.Find( fullPath .. "*.lua", "MOD" )
-    
-    if( !files && #files == 0 ) then
-        dbg.Warning( "No files found in '"..fullPath.."'\n" )
-        return
-     end 
-       
-    for _, v in ipairs( files ) do
-        LambdaMod.CPrintf( 4, "[LM] %s ", state )
-        LambdaMod.CPrintf( 0, "included %s.\n", ( fullPath_2 .. v ) )
-        include(  fullPath_2 ..  v )
+local includes = {
+    "lambda/server/hook.lua",
+    "lambda/server/lambdamod.lua",
+    "lambda/server/chatcmd.lua",
+    "lambda/server/libadmin.lua",
+    "lambda/server/net.lua",
+    "lambda/server/plugins.lua",
+    "lambda/server/reghooks.lua",
+    "lambda/server/vscript.lua",
+    "lambda/server/loader/loader.lua"
+}
+
+
+for _, v in ipairs(includes) do
+    if ( v != nil ) then
+        include( v )
     end
 end        
 
-IncludeFolder( "lambda/includes/modules")
-IncludeFolder( "lambda/includes/extensions" )
-IncludeFolder( "lambda/chatbase" )
-IncludeFolder( "lambda/meta" )
-IncludeFolder( "lambda/loader" )
+--IncludeFolder( "lambda/includes/extensions" )
+--IncludeFolder( "lambda/includes/modules")
+--IncludeFolder( "lambda/chatbase" )
+--IncludeFolder( "lambda/meta" )
+--IncludeFolder( "lambda/loader" )
 
-LambdaMod.CPrintf( 2, "LambdaMod has started! (%s)\n", LambdaMod["VERSION"] )
+LambdaMod.CPrintf( 1, "(Server) LambdaMod has started! (%s)\n", LambdaMod["VERSION"] )
 
 hook.add( "InitHUD", "LambdaWelcomeMessage", function(pPlayer)
 	UTIL.ClientPrint(pPlayer, 3, string.format( "This server is using LambdaMod v%s", tostring( LambdaMod["VERSION"] )))
 end ) 
 
-local RegConsoleCmd = LambdaMod.cvar.RegConsoleCmd
-local RegAdminCmd = LambdaMod.cvar.RegAdminCmd
-local RegServerCmd = LambdaMod.cvar.RegServerCmd
+local RegConsoleCmd = LambdaMod.RegConsoleCmd
+local RegAdminCmd = LambdaMod.RegAdminCmd
+local RegServerCmd = LambdaMod.RegServerCmd
+
+local PrintMessage = LambdaMod.Usermsg.PrintMessage
+local HUD_PRINTCONSOLE = LambdaMod.Enum.HUD.PRINTCONSOLE
 
 LambdaMod.AddCommand( "admins", function( ply, pCmd, args )
 	
@@ -76,13 +80,16 @@ LambdaMod.AddCommand( "admins", function( ply, pCmd, args )
     local cmd = args[ 1 ] 
     
     if ( !cmd || cmd == "" ) then
-        LambdaMod.CPrint(0, table.concat( helpText, "\n\t" ) )
+        --LambdaMod.CPrint(0, table.concat( helpText, "\n\t" ) )
+        for _, v in ipairs( helpText ) do
+            PrintMessage( ply, HUD_PRINTCONSOLE, v )
+        end   
         return
     end    
     
     if ( cmd:lower() == "list" ) then
         if ( !LambdaMod.AdminCFG ) then 
-            LambdaMod.printfc(0, "[LM] Sorry, but currently admin table isn't available right now.\n")
+            PrintMessage(ply, HUD_PRINTCONSOLE, "Sorry, but currently admin table isn't available right now.\n")
             return 
         end
         local list = {}
@@ -91,60 +98,67 @@ LambdaMod.AddCommand( "admins", function( ply, pCmd, args )
             --LambdaMod.printfc(0, "%s\n", tostring( k ) )
         end
         table.sort(list)
-        LambdaMod.CPrint(0, "[LM] Admins:\n\t" .. table.concat(list, "\n\t") )
+        --LambdaMod.CPrint(0, "Admins:\n\t" .. table.concat(list, "\n\t") )
+        PrintMessage( ply, HUD_PRINTCONSOLE, "[LM] Admins:" )
+        for _, v in ipairs(list) do
+            PrintMessage(ply, HUD_PRINTCONSOLE, v)
+        end    
     elseif ( cmd:lower() == "add" ) then
         local name = args[ 2 ]
         local permission = args[ 3 ] or 0
         local group = args[ 4 ] or 0
         if ( name == nil || name == "" ) then
-            LambdaMod.CPrint(0, "[LM] Usage: lambda admins add <name> [permission] [group]")
+            PrintMessage(ply, HUD_PRINTCONSOLE, "[LM] Usage: lambda admins add <name> [permission] [group]")
             return
         end 
         LambdaMod.AddAdmin( name, permission, group )
+        LambdaMod.LoadAdminConfig()
     elseif ( cmd:lower() == "remove" ) then
         local name = args[ 2 ]
         local permission = args[ 3 ] or 0
         local group = args[ 4 ] or 0
         
         if ( name == nil || name == "" ) then
-            LambdaMod.CPrint(0, "[LM] Usage: lambda admins remove <name>")
+            PrintMessage(ply, HUD_PRINTCONSOLE, "[LM] Usage: lambda admins remove <name>")
             return
         end   
         
         if ( !LambdaMod.AdminCFG[ name ] ) then
-            LambdaMod.CPrint(3, "[LM] Admin '" .. name .. "' doesn't exist.")
+            PrintMessage(ply, HUD_PRINTCONSOLE, "[LM] Admin '" .. name .. "' does not exist.")
             return
         end    
         LambdaMod.RemoveAdmin( name )  
+        LambdaMod.LoadAdminConfig()
     elseif ( cmd:lower() == "modify" ) then
         local name = args[ 2 ]
         local permission = args[ 3 ] or 0
         local group = args[ 4 ] or 0
         if ( name == nil || name == "" ) then
-            LambdaMod.CPrint(0, "[LM] Usage: lambda admins modify <name> [permission] [group]")
+            PrintMessage(ply, HUD_PRINTCONSOLE, "[LM] Usage: lambda admins modify <name> [permission] [group]")
             return
         end  
         
         if ( !LambdaMod.AdminCFG[ name ] ) then
-            LambdaMod.CPrint(3, "[LM] Admin '" .. name .. "' doesn't exist.")
+            PrintMessage(ply, HUD_PRINTCONSOLE, "[LM] Admin '" .. name .. "' doesn't exist.")
             return
         end    
         LambdaMod.WriteAdminConfig( name, permission, group )    
         
     elseif ( cmd:lower() == "refresh" ) then
-        LambdaMod.CPrint(0, "[LM] Refreshing..." )  
+        PrintMessage(ply, HUD_PRINTCONSOLE, "[LM] Refreshing..." )  
         LambdaMod.LoadAdminConfig()  
     end    
 end, "Admin manager" )
 
 RegAdminCmd( "lambda_cvar", function( ply, cmd, arg ) 
-  local tCmd = split( arg )
-  if ( !tCmd[1] )then
-    LambdaMod.printfc(0, "[LM] Usage: lambda_cvar <cvar> <value>\n")
-    return
-  end
+    --local PrintMessage = LambdaMod.Usermsg.PrintMessage
+    local tCmd = _CONSPLIT.Q_cmdsplit( arg )
+    if ( !tCmd[1] )then
+      PrintMessage( ply, HUD_PRINTCONSOLE, "[LM] Usage: lambda_cvar <cvar> <value>" )
+      return
+    end
   --engine.ServerCommand( tCmd[1] .. " " .. tostring(tCmd[2]) .. "\n" )
-  LambdaMod.cvar.SetValue( tCmd[1], tCmd[2] )
+    LambdaMod.cvar.SetValue( ply, tCmd[1], tCmd[2] )
   
   
 end, "Change ConVar value" )
@@ -162,7 +176,7 @@ end
 
 RegServerCmd( "lambda", function( ply, cmd, arg )
     
-	local args = _CONSPLIT.Q_cmdsplit( arg )
+    local args = _CONSPLIT.Q_cmdsplit( arg )
     
     --for word in arg:gmatch( "%S+" ) do
         --table.insert( tCmd, word )

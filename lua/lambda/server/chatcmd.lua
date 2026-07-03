@@ -15,6 +15,7 @@ local Prefix = LambdaMod.GetVar( "Prefix" ):GetString()
 
 LambdaMod.ChatCmd = {}
 local ChatCmd = LambdaMod.ChatCmd
+local HUD = LambdaMod.Enum.HUD
 
 function ChatCmd.AddCommand( name, func, desc, aliases )
     if ( ChatCmds[ name ] ) then
@@ -50,7 +51,16 @@ function ChatCmd.AddAdminCommand( name, func, desc, aliases )
             ChatCmdAliases[ string.lower( alias ) ] = name
         end
     end
-end    
+end  
+
+--[[
+    Enum.HUD = {
+    PRINTNOTIFY = 1,
+    PRINTCONSOLE = 2,
+    PRINTTALK = 3,
+    PRINTCENTER 4
+}
+]]
     
 ChatCmd.AddCommand( "test", function( pPlayer, pCmd, pArgs ) 
     return "Hi :)";
@@ -59,14 +69,26 @@ end )
 ChatCmd.AddCommand( "help", function( pPlayer, pCmd, pArgs )
     local ply_name = pPlayer:GetPlayerName()
     
-    local text = "Available commands:\n"
+    
+    local list = {}
     for cmd, data in pairs( ChatCmds ) do
         if ( !LambdaMod.AdminCFG[ ply_name ] && !data.admin ) then
-            text = text .. Prefix .. cmd .. " - " .. data.description .. "\n"
+            table.insert(list, {
+                cmd,
+                data.description
+            })
         else
-            text = text .. Prefix .. cmd .. " - " .. data.description .. "\n"
+            table.insert(list, {
+                cmd,
+                data.description
+            })
         end
     end
-    return text           
-        
+    
+    UTIL.ClientPrint( pPlayer, HUD.PRINTTALK, "[LM] Available commands:")
+    for _, v in ipairs(list) do
+        local name = v[1]
+        local description = v[2]
+        UTIL.ClientPrint( pPlayer, HUD.PRINTTALK, Prefix .. name .. " - " .. description )
+    end    
 end, "List of all chat commands" )
