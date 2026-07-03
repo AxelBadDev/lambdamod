@@ -5,7 +5,8 @@
 --============================================================================--
 
 includeC "IPluginShared.lua"
-includeC "base/libobject.lua"
+local IPluginObj = LambdaMod.IPluginObj
+--includeC "base/libobject.lua"
 
 local easyfs = require( "easyfs" )
 
@@ -23,21 +24,21 @@ function ILibraryLoader.LoadLibrary( path )
     
     local content = easyfs.Read( path )       
     if ( !content ) then
-        dbg.Warning( "\tLoadLibrary: couldn't open: '" .. path .. "' no such a file or directory\n" )
+        dbg.Warning( "LoadLibrary: couldn't open: '" .. path .. "' no such a file or directory\n" )
         return
     end
     
     local fn, err = loadstring( content, path ) 
     if ( !fn ) then
-        dbg.Warning( "\tLoadLibrary: [Lua compile error]['"..path.."']: " .. err .. "\n" )
+        dbg.Warning( "LoadLibrary: [Lua compile error]['"..path.."']: " .. err .. "\n" )
         return
     end    
     
-    LIBRARY = LibraryObj:Create()
+    LIBRARY = IPluginObj.Library()
     
     local ok, out = pcall( fn ) 
     if ( !ok ) then
-        dbg.Warning( "\tLoadLibrary: [Lua runtime error]['"..path.."']: " .. out .. "\n" )
+        dbg.Warning( "LoadLibrary: [Lua runtime error]['"..path.."']: " .. out .. "\n" )
         return
     end  
     
@@ -51,16 +52,16 @@ function ILibraryLoader.LoadLibrary( path )
     local api_version = LIBRARY.api
     
     if ( !api_version ) then 
-       LambdaMod.CPrintf( 3, "\tUnable to load \"%s\: unable to load library (undefined api version).\n", path )
+       LambdaMod.CPrintf( 3, "Unable to load \"%s\": unable to load library (undefined api version).\n", path )
 	   --LambdaMod.__REG_PLUGINS[ path ].__LOAD_STATUS = LAMBDAMOD_PLUGIN_FAILED
        return 
     elseif ( !IPluginShared.CheckAPIVersion( tonumber( api_version ) ) ) then
-       LambdaMod.CPrintf( 3, "\tUnable to load \"%s\": unable to load library (api version is too oudated).\n", path )
+       LambdaMod.CPrintf( 3, "Unable to load \"%s\": unable to load library (api version is too oudated).\n", path )
        --LambdaMod.__REG_PLUGINS[ path ].__LOAD_STATUS = LAMBDAMOD_PLUGIN_FAILED
        return 
     end   
     
-    LambdaMod.RegLibrary( LIBRARY )
+    --LambdaMod.RegLibrary( LIBRARY )
     LIBRARY = nil
 end   
 return ILibraryLoader

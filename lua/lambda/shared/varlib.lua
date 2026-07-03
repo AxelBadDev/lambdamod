@@ -3,8 +3,11 @@
 -- Purpose: 
 --
 --============================================================================--
+LambdaMod.VarLib = {
+    Vars = {}
+}
 
-LambdaMod.Vars = {}
+    
 
 local MetaVars = {}
 MetaVars.__index = MetaVars
@@ -105,7 +108,7 @@ MetaVars.__newindex = function( self, k, v )
 end 
 
 function LambdaMod.CreateVar( isConst, dataType, pName, value )
-    if ( LambdaMod.Vars[ pName ] ) then
+    if ( LambdaMod.VarLib.Vars[ pName ] ) then
         LambdaMod.CPrintf( 3, "Error! " )
         LambdaMod.CPrintf( 0, "'%s' already exists\n", tostring( pName ) )
         return nil
@@ -116,33 +119,33 @@ function LambdaMod.CreateVar( isConst, dataType, pName, value )
     assert( type( dataType ) == "string", "Expected string expected got "..type( dataType ))
     assert( type( value ) == dataType:lower(), "Attempt to assign ".. dataType:lower() ..  " variable '"..pName.."' with".. type( value ) .. " value." ) 
   --error( "Attempt to assign ".. dataType:lower() ..  " variable '"..pName.."' with ".. type( value ) .. " value.", 2 ) end
-    LambdaMod.Vars[ pName ] = {
+    LambdaMod.VarLib.Vars[ pName ] = {
         var = pName,
         const = isConst or false,
         value = value
     }
   
-    return setmetatable( LambdaMod.Vars[ pName ], MetaVars )
+    return setmetatable( LambdaMod.VarLib.Vars[ pName ], MetaVars )
 end 
 
 function LambdaMod.GetVar( pName ) 
   assert( type( pName ) == "string", "bad argument #1 to 'GetVar' (string expected got " .. type(pName) ..")" )
-  if ( !LambdaMod.Vars[ pName ] ) then
+  if ( !LambdaMod.VarLib.Vars[ pName ] ) then
       --j
       LambdaMod.CPrintf( 3, "Error! " )
       LambdaMod.CPrintf( 0, "Attempt to get a non-existing variable (%s)\n", tostring( pName ) )
       return nil
   end
-  return LambdaMod.Vars[ pName ]
+  return LambdaMod.VarLib.Vars[ pName ]
 end     
 
 function LambdaMod.SetVar( pName, value ) 
-  if ( !LambdaMod.Vars[ pName ] ) then
+  if ( !LambdaMod.VarLib.Vars[ pName ] ) then
       LambdaMod.CPrintf( 3, "Error! " )
       LambdaMod.CPrintf( 0, "Attempt to set a non existing variable (%s)\n", tostring( pName ) )
       return
   end
-  local meta = LambdaMod.Vars[ pName ] 
+  local meta = LambdaMod.VarLib.Vars[ pName ] 
   meta:SetValue( value )
 end
 

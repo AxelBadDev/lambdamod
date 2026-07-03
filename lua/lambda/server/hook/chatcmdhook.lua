@@ -1,12 +1,16 @@
 --============== Copyright (C) 2026 AxelBadDev, All Rights Reserved ==========--
 --
--- Purpose: Chat command hook
+-- Purpose: (LunarAdmin fork)
 --
 --============================================================================--
 
 local ChatCmds = LambdaMod.GetVar( "ChatCmds" ):GetTable()
 local ChatCmdAliases = LambdaMod.GetVar( "ChatCmdAliases" ):GetTable()
 local Prefix = LambdaMod.GetVar( "Prefix" ):GetString()
+
+local PrintMessage = LambdaMod.Usermsg.PrintMessage
+local HUD_PRINTCONSOLE = LambdaMod.Enum.HUD.PRINTCONSOLE
+local HUD_PRINTTALK = LambdaMod.Enum.HUD.PRINTTALK
 
 local fmt = string.format
 
@@ -35,9 +39,9 @@ hook.add( "Host_Say", "LambdaModHandleCommand", function( pPlayer, msg, teamonly
     local cmdName = string.lower( parts[1] or "" )
     table.remove( parts, 1 )
 
-	if ChatCmdAliases[ cmdName ] then
-		cmdName = ChatCmdAliases[ cmdName ]
-	end
+    if ChatCmdAliases[ cmdName ] then
+        cmdName = ChatCmdAliases[ cmdName ]
+    end
 
     local cmd = ChatCmds[ cmdName ]
     
@@ -48,14 +52,14 @@ hook.add( "Host_Say", "LambdaModHandleCommand", function( pPlayer, msg, teamonly
         if ( cmd.admin && !tobool( LambdaMod.AdminCFG[ name ].admin ) ) then
             LambdaMod.LogAction( "%s tried to use an admin command but isn't an admin", name )
             UTIL.ClientPrint(pPlayer, 3, "[LM] You don't have permission to use this command")
-            return ""
         end
     
         local ok, result = pcall( cmd.run, pPlayer, parts )
         
         if ( !ok ) then
-            LambdaMod.CPrintf( 3, "Error! Failed to run '%s' : %s\n", tostring( cmdName ), tostring( result ))
-            return ""
+            PrintMessage( pPlayer, HUD_PRINTTALK, fmt("[LM] Error! Failed to run '%s' : %s\n", tostring( cmdName ), tostring( result )))
+            PrintMessage( pPlayer, HUD_PRINTRALK, "If you see this, please report to the server administrator.")
+            return false
         end
         
         if result then
@@ -66,12 +70,12 @@ hook.add( "Host_Say", "LambdaModHandleCommand", function( pPlayer, msg, teamonly
                 --return ""
             else
             	UTIL.ClientPrint( pPlayer, 3, fmt("[LM] %s", tostring( result ) ))
-                --return ""
+                --return 
             end
-            return ""
+            --return ""
         end
     else
         UTIL.ClientPrint( pPlayer, 3, fmt("[LM] Unknown command: %s", tostring( cmdName ) ) )
-        return ""
+        --return ""
     end
 end )
