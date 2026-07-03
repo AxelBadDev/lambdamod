@@ -18,32 +18,27 @@ include "lambda/shared/concmd_split.lua"
 include "lambda/shared/info.lua"
 include "lambda/shared/folderinc.lua"
 include "lambda/shared/varlib.lua"
-
 include "lambda/shared/usermsg.lua"
 include "lambda/shared/console.lua"
 include "lambda/shared/cvar.lua"
-
----@class Settings
----@field Console_Prefix
-LambdaMod.Settings = {}
-LambdaMod.Settings.Console_Prefix = "CONSOLE"
+include "lambda/shared/conmsgcfg.lua"
 
 local includes = {
-    "lambda/server/hook.lua",
-    "lambda/server/lambdamod.lua",
-    "lambda/server/chatcmd.lua",
-    "lambda/server/libadmin.lua",
-    "lambda/server/net.lua",
-    "lambda/server/plugins.lua",
-    "lambda/server/reghooks.lua",
-    "lambda/server/vscript.lua",
-    "lambda/server/loader/loader.lua"
+    "hook.lua",
+    "lambdamod.lua",
+    "chatcmd.lua",
+    "libadmin.lua",
+    "net.lua",
+    "plugins.lua",
+    "reghooks.lua",
+    "vscript.lua",
+    "loader/loader.lua"
 }
 
 
 for _, v in ipairs(includes) do
     if ( v != nil ) then
-        include( v )
+        include( "lambda/server/" .. v )
     end
 end        
 

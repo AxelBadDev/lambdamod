@@ -72,7 +72,7 @@ function LambdaMod.LoadConfig( name, path )
 end             
 
 function LambdaMod.SaveConfig() end          
-    
+
 if SERVER then        
 function LambdaMod.WriteAdminLegacyConfig( name, set )
     --assert( type( set ) == "table", "bad argument #1 to 'WriteAdminConfig' (table expected got "..type( set )..")")
