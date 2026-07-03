@@ -3,8 +3,11 @@
 -- Purpose: 
 --
 --============================================================================--
-if( CLIENT ) then return end
 
 local easyfs = require( "easyfs" )
 
-include "lambda/init.lua"
+if ( SERVER ) then
+    include "lambda/init.lua"
+else
+    include "lambda/cl_init.lua"
+end    
