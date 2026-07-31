@@ -5,4 +5,4 @@
 --============================================================================--
 
 LambdaMod.Settings = {}
-LambdaMod.Settings.Console_Prefix = "CONSOLE"
+LambdaMod.Settings.Console_Prefix = LambdaMod.CConfig.ConsolePrefix or "CONSOLE"

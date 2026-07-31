@@ -1,9 +1,3 @@
---============== Copyright (C) 2026 AxelBadDev, All Rights Reserved ==========--
---
--- Purpose: 
---
---============================================================================--
-
 LambdaMod.bit = {}
 local Lbit = LambdaMod.bit
 

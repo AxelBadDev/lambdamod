@@ -8,34 +8,7 @@
 LambdaMod.Enum = {}
 local Enum = LambdaMod.Enum
 
-LambdaMod["VERSION"] = "4.0.0"
-LambdaMod["BRANCH"] = "exp"
-LambdaMod["BUILD"] = "0400"
-LambdaMod["GAME_VERSION"] = "1.1"
-LambdaMod["DEVELOPMENT"] = true
-
-_G["LAMBDAMOD_VERSION"] 	 = LambdaMod.VERSION
-_G["LAMBDAMOD_BRANCH"] 	  = LambdaMod.BRANCH
-_G["LAMBDAMOD_BUILD"] 	   = LambdaMod.BUILD
-_G["LAMBDAMOD_GAME_VERSION"] = LambdaMod.GAME_VERSION
-
 _E["LAMBDAMOD"] = {}
-
-LambdaMod["MONTHS"] = 
-{
-	"Jan",
-	"Feb",
-	"Mar",
-	"Apr",
-	"May",
-	"Jun",
-	"Jul",
-	"Aug",
-	"Sep",
-	"Oct",
-	"Nov",
-	"Dec"
-}
 
 LambdaMod.ConsoleColor = 
 {
@@ -47,14 +20,6 @@ LambdaMod.ConsoleColor =
     CONSOLE_GREEN = 5,
     CONSOLE_BLUE = 6,
     CONSOLE_ORANGE = 7
-}
-
-
-LambdaMod["BUILD_DATA"] = 
-{
-    day = "3",
-    month = "July",
-    year = "2026"
 }
 
 LambdaMod["BUILD_DATE"]  = string.format( 

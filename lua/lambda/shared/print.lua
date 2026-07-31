@@ -15,7 +15,7 @@ end
 ---@vararg any
 function LambdaMod.CPrint(pMode, ...)
 
-	pMode = pMode or 0
+    pMode = pMode or 0
     
     local text = ""
     local args = {...}
@@ -23,26 +23,26 @@ function LambdaMod.CPrint(pMode, ...)
         text = text .. table.concat(args, " ")
     end
 
-	if ( pMode == ConsoleColor.CONSOLE_DEFAULT ) then  
+    if ( pMode == ConsoleColor.CONSOLE_DEFAULT ) then  
         dbg.ConMsg( tostring( text ) .. "\n" )
-	elseif ( pMode == ConsoleColor.CONSOLE_CYAN ) then 
+    elseif ( pMode == ConsoleColor.CONSOLE_CYAN ) then 
         dbg.ConColorMsg(LambdaMod.COLOR.CYAN, tostring( text ) .. "\n")
-	elseif ( pMode == ConsoleColor.CONSOLE_WARNING ) then 
+    elseif ( pMode == ConsoleColor.CONSOLE_WARNING ) then 
         dbg.ConColorMsg(LambdaMod.COLOR.WARNING, tostring( text ) .. "\n")
-	elseif ( pMode == ConsoleColor.CONSOLE_ERROR ) then 
+    elseif ( pMode == ConsoleColor.CONSOLE_ERROR ) then 
         dbg.ConColorMsg(LambdaMod.COLOR.RED, tostring( text ) .. "\n")
-	elseif ( pMode == ConsoleColor.CONSOLE_LUAPLUS ) then 
+    elseif ( pMode == ConsoleColor.CONSOLE_LUAPLUS ) then 
         dbg.ConColorMsg(LambdaMod.COLOR.LUAPLUS, tostring( text ) .. "\n")
-	elseif ( pMode == ConsoleColor.CONSOLE_GREEN ) then 
+    elseif ( pMode == ConsoleColor.CONSOLE_GREEN ) then 
         dbg.ConColorMsg(LambdaMod.COLOR.GREEN, tostring( text ) .. "\n")
-	elseif ( pMode == ConsoleColor.CONSOLE_BLUE ) then 
-        dbg.ConColorMsg(LambdaMod.COLOR.BLUE, tostring( text ) .. "\n" )	
+    elseif ( pMode == ConsoleColor.CONSOLE_BLUE ) then 
+        dbg.ConColorMsg(LambdaMod.COLOR.BLUE, tostring( text ) .. "\n" )
     elseif ( pMode == ConsoleColor.CONSOLE_ORANGE ) then 
-        dbg.ConColorMsg(LambdaMod.COLOR.ORANGE, tostring( text ) .. "\n" )	    
+        dbg.ConColorMsg(LambdaMod.COLOR.ORANGE, tostring( text ) .. "\n" )
     else 
         dbg.Warning( string.format( "UNDEFINED COLOR TABLE (%s)\n", tostring( pMode ) )) 
         return       
-	end
+    end
 end
 
 ---Prints formatted colored text
@@ -50,41 +50,41 @@ end
 ---@vararg any
 function LambdaMod.CPrintf(pMode, ...)
 
-	pMode = pMode or 0
+    pMode = pMode or 0
     
     local text = string.format( ... )
 
-	if ( pMode == ConsoleColor.CONSOLE_DEFAULT ) then 
+    if ( pMode == ConsoleColor.CONSOLE_DEFAULT ) then 
         dbg.ConMsg( text )
-	elseif ( pMode == ConsoleColor.CONSOLE_CYAN ) then 
+    elseif ( pMode == ConsoleColor.CONSOLE_CYAN ) then 
         dbg.ConColorMsg( LambdaMod.COLOR.CYAN, text )
-	elseif ( pMode == ConsoleColor.CONSOLE_WARNING ) then 
+    elseif ( pMode == ConsoleColor.CONSOLE_WARNING ) then 
         dbg.ConColorMsg( LambdaMod.COLOR.WARNING, text  )
-	elseif ( pMode == ConsoleColor.CONSOLE_ERROR ) then 
+    elseif ( pMode == ConsoleColor.CONSOLE_ERROR ) then 
         dbg.ConColorMsg( LambdaMod.COLOR.RED, text )
-	elseif ( pMode == ConsoleColor.CONSOLE_LUAPLUS ) then 
+    elseif ( pMode == ConsoleColor.CONSOLE_LUAPLUS ) then 
         dbg.ConColorMsg( LambdaMod.COLOR.LUAPLUS, text )
-	elseif ( pMode == ConsoleColor.CONSOLE_GREEN ) then 
+    elseif ( pMode == ConsoleColor.CONSOLE_GREEN ) then 
         dbg.ConColorMsg( LambdaMod.COLOR.GREEN, text )
-	elseif ( pMode == ConsoleColor.CONSOLE_BLUE ) then 
+    elseif ( pMode == ConsoleColor.CONSOLE_BLUE ) then 
         dbg.ConColorMsg( LambdaMod.COLOR.BLUE, text )
     elseif ( pMode == ConsoleColor.CONSOLE_ORANGE ) then 
         dbg.ConColorMsg( LambdaMod.COLOR.ORANGE, text )    
     else 
         dbg.Warning( string.format( "UNDEFINED COLOR TABLE (%s)\n", tostring( pMode ) )) 
         return   
-	end
+    end
 end
 
 --- Prints error text
 ---@vararg any
-function LambdaMod.Error(...)
-    local text = ""
-    local args = {...}
-    if #args > 0 then
-        text = text .. table.concat(args, " ")
-    end
-    dbg.ConColorMsg( LambdaMod[ "COLOR" ].RED, tostring( text ) .. "\n" )
+function LambdaMod.error( ... )
+    
+    if ( CLIENT ) then
+        dbg.ConColorMsg( LambdaMod[ "COLOR" ].RED, "[LAMBDAMOD CLIENT ERROR] " .. string.format( ... ) .. "\n" )
+    else
+        dbg.ConColorMsg( LambdaMod[ "COLOR" ].RED, "[LAMBDAMOD SERVER ERROR] " .. string.format( ... ) .. "\n" )    
+    end    
 end  
   
 ---Prints cyan text
